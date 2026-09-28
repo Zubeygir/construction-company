@@ -31,9 +31,9 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
-# .env.local kasıtlı olarak takip edilmektedir (sadece placeholder içerir)
+# Only the placeholder template is tracked; real values live in .env.local
 .env*
-!.env.local
+!.env.example
 
 # vercel
 .vercel
@@ -41,5 +41,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-docs

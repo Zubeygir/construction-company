@@ -9,8 +9,6 @@ type WebhookPayload = {
   operation?: unknown;
   slug?: unknown;
   previousSlug?: unknown;
-  categoryId?: unknown;
-  previousCategoryId?: unknown;
   slugChanged?: unknown;
   noIndexChanged?: unknown;
   affectsList?: unknown;
@@ -22,8 +20,6 @@ type CollectionConfig = {
 };
 
 const collectionConfig: Record<string, CollectionConfig> = {
-  blogPost: { detailPrefix: "blog:detail", listTag: "blog:list" },
-  service: { detailPrefix: "service:detail", listTag: "service:list" },
   project: { detailPrefix: "project:detail", listTag: "project:list" },
 };
 
@@ -33,8 +29,6 @@ const singletonTags: Record<string, string> = {
   homePage: "home",
   aboutPage: "about",
   contactPage: "contact",
-  blogPage: "blogPage",
-  servicesPage: "servicesPage",
   projectsPage: "projectsPage",
 };
 
@@ -42,8 +36,6 @@ const sitemapPageTypes = new Set([
   "homePage",
   "aboutPage",
   "contactPage",
-  "blogPage",
-  "servicesPage",
   "projectsPage",
 ]);
 
@@ -71,12 +63,6 @@ function getRevalidationTags(
   const tags = new Set<string>();
   const currentSlug = readSlug(payload.slug);
   const previousSlug = readSlug(payload.previousSlug);
-  const categoryId =
-    typeof payload.categoryId === "string" ? payload.categoryId : undefined;
-  const previousCategoryId =
-    typeof payload.previousCategoryId === "string"
-      ? payload.previousCategoryId
-      : undefined;
   const slugChanged = payload.slugChanged === true;
   const noIndexChanged = payload.noIndexChanged === true;
   const affectsList = payload.affectsList !== false;
@@ -94,23 +80,9 @@ function getRevalidationTags(
     if (inventoryChanged || affectsList) {
       tags.add(collection.listTag);
       tags.add("home:featured");
-
-      if (documentType === "blogPost") {
-        if (categoryId) tags.add(`blog:related:${categoryId}`);
-        if (previousCategoryId) {
-          tags.add(`blog:related:${previousCategoryId}`);
-        }
-      }
     }
 
     if (inventoryChanged) tags.add("sitemap");
-    return [...tags];
-  }
-
-  if (documentType === "blogCategory") {
-    tags.add("blog:list");
-    tags.add("blog:categories");
-    tags.add("home:featured");
     return [...tags];
   }
 

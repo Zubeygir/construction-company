@@ -1,4 +1,3 @@
-import { FadeIn } from "@/components/ui/FadeIn";
 import { cn } from "@/lib/utils";
 
 interface SectionHeadingProps {
@@ -24,7 +23,7 @@ export function SectionHeading({
         className
       )}
     >
-      <FadeIn direction="up">
+      <div>
         {eyebrow && (
           <span className="text-xs font-semibold tracking-wider text-primary uppercase inline-block mb-1">
             {eyebrow}
@@ -38,7 +37,7 @@ export function SectionHeading({
             {subtitle}
           </p>
         )}
-      </FadeIn>
+      </div>
     </div>
   );
 }

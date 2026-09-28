@@ -1,5 +1,4 @@
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { FadeIn } from "@/components/ui/FadeIn";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { RichText } from "@/components/ui/RichText";
 import { Button } from "@/components/ui/button";
@@ -43,22 +42,22 @@ export function AboutSection({
             />
 
             {text && text.length > 0 && (
-              <FadeIn delay={0.15}>
+              <div>
                 <RichText value={text} className="text-muted-foreground" />
-              </FadeIn>
+              </div>
             )}
 
-            <FadeIn delay={0.25} className="pt-4">
+            <div className="pt-4">
               <Button size="lg" render={<Link href={displayCtaLink} prefetch={false} />}>
                 {displayCtaLabel}
               </Button>
-            </FadeIn>
+            </div>
           </div>
 
           {/* Sağ Kolon: Görsel */}
           {image && (
             <div className="lg:col-span-5 relative">
-              <FadeIn direction="left" delay={0.3} className="relative">
+              <div className="relative">
                 {/* Decorative Elements for premium look */}
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-primary/20 to-transparent blur-2xl z-0" />
                 <div className="relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl z-10 border bg-card">
@@ -69,7 +68,7 @@ export function AboutSection({
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-              </FadeIn>
+              </div>
             </div>
           )}
 

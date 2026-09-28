@@ -4,8 +4,6 @@ import { projectsPageQuery, projectListQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/layout/PageHero";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { FadeIn } from "@/components/ui/FadeIn";
-import { AnimateGroup } from "@/components/ui/AnimateGroup";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ProjectsPage as ProjectsPageType, Project } from "@/types";
@@ -36,7 +34,7 @@ export default async function ProjectsHubPage() {
 
       <div className="container mx-auto px-4">
         {projects && projects.length > 0 ? (
-          <AnimateGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project: Project) => (
               <Link key={project.slug?.current} href={`/projeler/${project.slug?.current}`} prefetch={false} className="group block">
                 <article className="border rounded-xl overflow-hidden bg-card hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-1">
@@ -66,16 +64,16 @@ export default async function ProjectsHubPage() {
                 </article>
               </Link>
             ))}
-          </AnimateGroup>
+          </div>
         ) : (
-          <FadeIn>
+          <div>
             <p className="text-muted-foreground text-center py-16">Henüz eklenmiş bir proje bulunmuyor.</p>
-          </FadeIn>
+          </div>
         )}
 
         {/* CTA Section */}
         {pageData?.ctaLabel && pageData?.ctaLink && (
-          <FadeIn className="mt-16 md:mt-24 p-8 md:p-12 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-background border text-center max-w-4xl mx-auto">
+          <div className="mt-16 md:mt-24 p-8 md:p-12 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-background border text-center max-w-4xl mx-auto">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">Bir Projeniz mi Var?</h3>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
               Hayalinizdeki projeyi birlikte gerçeğe dönüştürelim. Uzman ekibimizle konuşmak için hemen iletişime geçin.
@@ -83,7 +81,7 @@ export default async function ProjectsHubPage() {
             <Button size="lg" render={<Link href={pageData.ctaLink} prefetch={false} />}>
               {pageData.ctaLabel}
             </Button>
-          </FadeIn>
+          </div>
         )}
       </div>
     </div>

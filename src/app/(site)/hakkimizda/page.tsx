@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { cachedFetch } from "@/sanity/lib/client";
 import { aboutPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
-import { FadeIn } from "@/components/ui/FadeIn";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { RichText } from "@/components/ui/RichText";
 import { PageHero } from "@/components/layout/PageHero";
@@ -34,21 +33,21 @@ export default async function AboutPage() {
           {/* Sol Kolon: Metin İçeriği */}
           <div className="lg:col-span-7">
             {/* If there was a body block or pageSubtitle, render it */}
-            <FadeIn direction="up">
+            <div>
               <h2 className="text-3xl font-bold tracking-tight mb-6">
                 {data?.pageTitle || "Hakkımızda"}
               </h2>
-            </FadeIn>
+            </div>
 
-            <FadeIn delay={0.2}>
+            <div>
               <RichText value={data?.body} />
-            </FadeIn>
+            </div>
           </div>
 
           {/* Sağ Kolon: Görsel */}
           <div className="lg:col-span-5 lg:sticky lg:top-24">
             {data?.mainImage && (
-              <FadeIn direction="left" delay={0.3}>
+              <div>
                 <div className="relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
                   <SanityImage
                     image={data.mainImage}
@@ -58,7 +57,7 @@ export default async function AboutPage() {
                     priority
                   />
                 </div>
-              </FadeIn>
+              </div>
             )}
           </div>
         </div>

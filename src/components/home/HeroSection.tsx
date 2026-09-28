@@ -1,4 +1,3 @@
-import { FadeIn } from "@/components/ui/FadeIn";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -22,9 +21,7 @@ export function resolveLink(linkData?: CtaLink) {
   if (!ref || !ref._type) return "/";
   
   switch (ref._type) {
-    case "service": return `/hizmetler/${ref.slug}`;
     case "project": return `/projeler/${ref.slug}`;
-    case "blogPost": return `/blog/${ref.slug}`;
     case "aboutPage": return `/hakkimizda`;
     case "contactPage": return `/iletisim`;
     default: return "/";
@@ -49,7 +46,7 @@ export function HeroSection({ data }: HeroSectionProps) {
       )}
 
       <div className="relative z-10 container mx-auto px-4 py-24">
-        <FadeIn direction="up" duration={0.7}>
+        <div>
           {data?.heroTitle && (
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 max-w-3xl">
               {data.heroTitle}
@@ -65,7 +62,7 @@ export function HeroSection({ data }: HeroSectionProps) {
               {data.heroCtaLabel}
             </Button>
           )}
-        </FadeIn>
+        </div>
       </div>
     </section>
   );

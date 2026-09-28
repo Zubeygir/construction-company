@@ -7,9 +7,7 @@ export const homePageType = defineType({
   groups: [
     { name: "hero", title: "Hero Bölümü" },
     { name: "about", title: "Hakkımızda Önizleme" },
-    { name: "services", title: "Hizmetler Önizleme" },
     { name: "projects", title: "Projeler Önizleme" },
-    { name: "blog", title: "Blog Önizleme" },
     { name: "seo", title: "SEO Ayarları" },
   ],
   fields: [
@@ -49,9 +47,7 @@ export const homePageType = defineType({
           title: "İç Sayfa Seç",
           type: "reference",
           to: [
-            { type: "service" },
             { type: "project" },
-            { type: "blogPost" },
             { type: "aboutPage" },
             { type: "contactPage" },
           ],
@@ -61,7 +57,7 @@ export const homePageType = defineType({
           name: "manual",
           title: "Manuel Link",
           type: "string",
-          description: "Örn: /blog, /galeri veya https://google.com (Link başındaki / işaretini unutmayın)",
+          description: "Örn: /projeler, /iletisim veya https://google.com (Link başındaki / işaretini unutmayın)",
           hidden: ({ parent }) => parent?.linkType !== "manual",
         }),
       ],
@@ -82,18 +78,6 @@ export const homePageType = defineType({
     defineField({ name: "aboutCtaLabel", title: "Daha Fazla Buton Metni", type: "string", group: "about", initialValue: "Devamını Oku" }),
     defineField({ name: "aboutCtaLink", title: "Buton Linki", type: "string", group: "about", initialValue: "/hakkimizda" }),
 
-    // Services Preview Group
-    defineField({ name: "servicesTitle", title: "Hizmetler Bölüm Başlığı", type: "string", group: "services", initialValue: "Hizmetlerimiz" }),
-    defineField({ name: "servicesSubtitle", title: "Hizmetler Bölüm Alt Başlığı", type: "text", rows: 2, group: "services", initialValue: "Size en uygun profesyonel çözümlerimiz." }),
-    defineField({
-      name: "featuredServices",
-      title: "Öne Çıkan Hizmetler",
-      description: "Ana sayfada gösterilecek hizmetleri seçin ve sıralayın (Sürükleyip bırakarak sıralayabilirsiniz).",
-      type: "array",
-      group: "services",
-      of: [{ type: "reference", to: [{ type: "service" }] }],
-    }),
-
     // Projects Preview Group
     defineField({ name: "projectsTitle", title: "Projeler Bölüm Başlığı", type: "string", group: "projects", initialValue: "Projelerimiz" }),
     defineField({ name: "projectsSubtitle", title: "Projeler Bölüm Alt Başlığı", type: "text", rows: 2, group: "projects", initialValue: "Başarıyla tamamladığımız güncel projeler." }),
@@ -104,18 +88,6 @@ export const homePageType = defineType({
       type: "array",
       group: "projects",
       of: [{ type: "reference", to: [{ type: "project" }] }],
-    }),
-
-    // Blog Preview Group
-    defineField({ name: "blogTitle", title: "Blog Bölüm Başlığı", type: "string", group: "blog", initialValue: "Son Haberler & Blog" }),
-    defineField({ name: "blogSubtitle", title: "Blog Bölüm Alt Başlığı", type: "text", rows: 2, group: "blog", initialValue: "Sektördeki gelişmeler ve ekibimizden güncel paylaşımlar." }),
-    defineField({
-      name: "featuredPosts",
-      title: "Öne Çıkan Blog Yazıları",
-      description: "Ana sayfada gösterilecek blog yazılarını seçin ve sıralayın. Boş bırakılırsa en son eklenen blog yazıları otomatik gösterilir.",
-      type: "array",
-      group: "blog",
-      of: [{ type: "reference", to: [{ type: "blogPost" }] }],
     }),
 
     // SEO Group

@@ -6,7 +6,7 @@ const navItemFields = [
     name: "href",
     title: "Link / Path",
     type: "string",
-    description: "İç sayfa için: /hakkimizda, /blog gibi. Dış link için: https://google.com",
+    description: "İç sayfa için: /hakkimizda, /projeler gibi. Dış link için: https://google.com",
     validation: (Rule) => Rule.required(),
   }),
   defineField({ name: "openInNewTab", title: "Yeni Sekmede Aç", type: "boolean", initialValue: false }),
@@ -18,7 +18,7 @@ const navItemFields = [
       type: "object",
       fields: [
         defineField({ name: "label", title: "Etiket", type: "string", validation: (Rule) => Rule.required() }),
-        defineField({ name: "href", title: "Link / Path", type: "string", description: "Örn: /blog/ilk-yazi" }),
+        defineField({ name: "href", title: "Link / Path", type: "string", description: "Örn: /projeler/zeytinalani-tas-evler" }),
         defineField({ name: "openInNewTab", title: "Yeni Sekmede Aç", type: "boolean", initialValue: false }),
       ],
     }],

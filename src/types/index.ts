@@ -29,27 +29,6 @@ export interface SanitySlug {
   _type?: "slug";
 }
 
-export interface BlogCategory {
-  _id: string;
-  title: string;
-  slug: SanitySlug;
-}
-
-export interface BlogPost {
-  _id?: string;
-  _createdAt?: string;
-  _updatedAt?: string;
-  title: string;
-  slug: SanitySlug;
-  excerpt?: string;
-  publishedAt?: string;
-  category?: BlogCategory;
-  mainImage?: SanityImage;
-  body?: PortableTextBlock[];
-  seoTags?: string[];
-  seo?: SeoSettings;
-}
-
 export interface SocialLink {
   platform: string;
   url: string;
@@ -91,17 +70,6 @@ export interface NavItem {
 export interface Navigation {
   headerLinks?: NavItem[];
   footerLinks?: NavItem[];
-}
-
-export interface Service {
-  _id?: string;
-  _createdAt?: string;
-  _updatedAt?: string;
-  title: string;
-  slug: SanitySlug;
-  mainImage?: SanityImage;
-  body?: PortableTextBlock[];
-  seo?: SeoSettings;
 }
 
 export interface Project {
@@ -162,8 +130,6 @@ export interface InnerPageWithCta extends BasePage {
   ctaLink?: string;
 }
 
-export type BlogPage = InnerPageWithCta;
-export type ServicesPage = InnerPageWithCta;
 export type ProjectsPage = InnerPageWithCta;
 
 export interface HomePage {
@@ -178,15 +144,9 @@ export interface HomePage {
   aboutImage?: SanityImage;
   aboutCtaLabel?: string;
   aboutCtaLink?: string;
-  servicesTitle?: string;
-  servicesSubtitle?: string;
-  featuredServices?: Service[];
   projectsTitle?: string;
   projectsSubtitle?: string;
   featuredProjects?: Project[];
-  blogTitle?: string;
-  blogSubtitle?: string;
-  featuredPosts?: BlogPost[];
   seo?: SeoSettings;
 }
 

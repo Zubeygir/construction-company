@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { cachedFetch } from "@/sanity/lib/client";
 import { contactPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
-import { FadeIn } from "@/components/ui/FadeIn";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { PageHero } from "@/components/layout/PageHero";
 import { ContactPage as ContactPageType } from "@/types";
@@ -38,7 +37,7 @@ export default async function ContactPage() {
         <div className="max-w-5xl mx-auto space-y-12">
           {/* İletişim Bilgileri (Site Ayarlarında tanımlıysa gösterilir) */}
           {hasContactInfo && (
-            <FadeIn>
+            <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {contact?.phone && (
                   <a
@@ -99,29 +98,29 @@ export default async function ContactPage() {
                   </div>
                 )}
               </div>
-            </FadeIn>
+            </div>
           )}
 
           {/* İletişim Formu (Sanity'de showForm aktifse gösterilir) */}
           {data?.showForm && (
             <div className="max-w-2xl mx-auto">
-              <FadeIn delay={0.15}>
+              <div>
                 <ContactForm
                   formTitle={data?.formTitle}
                   successMessage={data?.successMessage}
                 />
-              </FadeIn>
+              </div>
             </div>
           )}
 
           {/* Harita İframe (Site Ayarlarında tanımlıysa) */}
           {contact?.mapIframe && (
-            <FadeIn delay={0.2}>
+            <div>
               <div
                 className="w-full rounded-2xl overflow-hidden border border-border shadow-sm [&_iframe]:w-full [&_iframe]:h-[380px] [&_iframe]:border-0"
                 dangerouslySetInnerHTML={{ __html: contact.mapIframe }}
               />
-            </FadeIn>
+            </div>
           )}
         </div>
       </div>

@@ -1,7 +1,5 @@
-import { FadeIn } from "@/components/ui/FadeIn";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { AnimateGroup } from "@/components/ui/AnimateGroup";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Project } from "@/types";
@@ -34,7 +32,7 @@ export function ProjectsSection({
         {/* Content */}
         {projects && projects.length > 0 ? (
           <div className="space-y-12">
-            <AnimateGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.slice(0, 3).map((project: Project) => (
                 <Link key={project.slug?.current} href={`/projeler/${project.slug?.current}`} prefetch={false} className="group block relative overflow-hidden rounded-xl border aspect-[4/3]">
                   {project.mainImage ? (
@@ -67,18 +65,18 @@ export function ProjectsSection({
                   </div>
                 </Link>
               ))}
-            </AnimateGroup>
+            </div>
             
-            <FadeIn delay={0.2} className="text-center pt-4">
+            <div className="text-center pt-4">
               <Button variant="outline" size="lg" render={<Link href="/projeler" prefetch={false} />}>
                 Tüm Projeleri Gör
               </Button>
-            </FadeIn>
+            </div>
           </div>
         ) : (
-          <FadeIn>
+          <div>
             <p className="text-muted-foreground text-center py-12">Henüz öne çıkarılmış bir proje bulunmuyor.</p>
-          </FadeIn>
+          </div>
         )}
 
       </div>

@@ -2,10 +2,21 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+  }
+  /* 18px base for an older audience (docs/PRODUCT.md → Accessibility) */
+  body {
+    @apply bg-background text-foreground;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
 }

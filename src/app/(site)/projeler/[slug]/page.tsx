@@ -5,7 +5,6 @@ import { projectBySlugQuery, projectSlugsQuery } from "@/sanity/lib/queries";
 import { buildMetadata, portableTextToPlainText } from "@/lib/seo";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { FadeIn } from "@/components/ui/FadeIn";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -45,15 +44,15 @@ export default async function ProjectPage({ params }: Props) {
     <>
       <JsonLd data={projectJsonLd(project)} />
       <article className="container mx-auto px-4 py-16 max-w-3xl break-words overflow-x-hidden">
-      <FadeIn direction="up">
+      <div>
         <Button variant="ghost" className="mb-8 -ml-2" render={<Link href="/projeler" prefetch={false} />}>
           ← Projelere Dön
         </Button>
         <h1 className="text-4xl font-bold mb-8">{project.title}</h1>
-      </FadeIn>
+      </div>
 
       {project.mainImage && (
-        <FadeIn delay={0.15}>
+        <div>
           <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-12">
             <SanityImage
               image={project.mainImage}
@@ -63,12 +62,12 @@ export default async function ProjectPage({ params }: Props) {
               priority
             />
           </div>
-        </FadeIn>
+        </div>
       )}
 
-      <FadeIn delay={0.25}>
+      <div>
         <RichText value={project.body} />
-      </FadeIn>
+      </div>
     </article>
     </>
   );

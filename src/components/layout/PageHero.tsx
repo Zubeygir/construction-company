@@ -1,5 +1,4 @@
 import { SanityImage } from "@/components/ui/SanityImage";
-import { FadeIn } from "@/components/ui/FadeIn";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SanityImage as SanityImageType, BreadcrumbItem } from "@/types";
 
@@ -40,7 +39,7 @@ export function PageHero({
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4">
         <div className="max-w-3xl">
-          <FadeIn direction="up" duration={0.6}>
+          <div>
             {/* Breadcrumbs */}
             <Breadcrumbs
               items={breadcrumbs}
@@ -56,7 +55,7 @@ export function PageHero({
                 {subtitle}
               </p>
             )}
-          </FadeIn>
+          </div>
         </div>
       </div>
     </section>

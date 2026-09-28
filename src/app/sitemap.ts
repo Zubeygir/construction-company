@@ -14,9 +14,7 @@ type SitemapPage = {
 };
 
 type SitemapData = {
-  pages?: Record<"home" | "about" | "contact" | "blog" | "services" | "projects", SitemapPage | null>;
-  blogPosts?: SitemapItem[];
-  services?: SitemapItem[];
+  pages?: Record<"home" | "about" | "contact" | "projects", SitemapPage | null>;
   projects?: SitemapItem[];
 };
 
@@ -37,8 +35,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: base, lastModified: lastModified(pages?.home?._updatedAt), changeFrequency: "weekly", priority: 1 },
     { url: `${base}/hakkimizda`, lastModified: lastModified(pages?.about?._updatedAt), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/iletisim`, lastModified: lastModified(pages?.contact?._updatedAt), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/blog`, lastModified: lastModified(pages?.blog?._updatedAt), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${base}/hizmetler`, lastModified: lastModified(pages?.services?._updatedAt), changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/projeler`, lastModified: lastModified(pages?.projects?._updatedAt), changeFrequency: "monthly", priority: 0.8 },
   ];
 
@@ -47,26 +43,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (path === "/") return !pages?.home?.noIndex;
     if (path === "/hakkimizda") return !pages?.about?.noIndex;
     if (path === "/iletisim") return !pages?.contact?.noIndex;
-    if (path === "/blog") return !pages?.blog?.noIndex;
-    if (path === "/hizmetler") return !pages?.services?.noIndex;
     if (path === "/projeler") return !pages?.projects?.noIndex;
     return true;
   });
 
   const dynamicRoutes: MetadataRoute.Sitemap = [
-    ...(data?.blogPosts?.map((p) => ({
-      url: `${base}/blog/${p.slug}`,
-      lastModified: lastModified(p._updatedAt),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    })) || []),
-
-    ...(data?.services?.map((p) => ({
-      url: `${base}/hizmetler/${p.slug}`,
-      lastModified: lastModified(p._updatedAt),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })) || []),
     ...(data?.projects?.map((p) => ({
       url: `${base}/projeler/${p.slug}`,
       lastModified: lastModified(p._updatedAt),

@@ -8,9 +8,7 @@ import { BreadcrumbItem } from "@/types";
 
 const ROUTE_LABELS: Record<string, string> = {
   hakkimizda: "Hakkımızda",
-  hizmetler: "Hizmetlerimiz",
   projeler: "Projelerimiz",
-  blog: "Blog",
   iletisim: "İletişim",
 };
 

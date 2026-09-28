@@ -1,70 +1,41 @@
-# Next.js + Sanity Kurumsal Site Boilerplate
+# Tınaz Yapı: Residential Developer Demo
 
-Modern ajanslar için hazır, production-grade Next.js 15 + Sanity v3 boilerplate.
+Marketing site for a fictional boutique residential developer in Urla, built as a resellable demo on the Next.js + Sanity boilerplate. Re-skin per client through design tokens and Sanity content.
 
-## Tech Stack
+**Start here:** `docs/PRODUCT.md` (strategy), `docs/DESIGN.md` (visual system), `docs/CONTENT-MODEL.md` (schema spec), `docs/ROADMAP.md` (decisions, open questions, next steps). Agent rules live in `CLAUDE.md` (mirrored in `.agents/rules/boilerplate-rules.md`).
 
-| Teknoloji | Versiyon | Açıklama |
-|-----------|----------|----------|
-| Next.js | 15+ | App Router, TypeScript |
-| Tailwind CSS | v4 | `@plugin` tabanlı konfigürasyon |
-| shadcn/ui | v4 | `@base-ui/react` tabanlı |
-| Sanity | v3 | Headless CMS |
-| Framer Motion | latest | Animasyonlar |
-| react-icons | latest | SVG ikon kütüphanesi |
-| Nodemailer | latest | İletişim formu e-postası |
-| Zod + @t3-oss/env-nextjs | latest | Type-safe env validasyonu |
+## Stack
 
----
+Next.js 16 (App Router) · React 19 · Sanity v5 (Studio at `/studio`) · Tailwind CSS v4 · shadcn/ui on `@base-ui/react` · framer-motion · nodemailer. Font: Archivo (variable, `wdth` axis) via `next/font`.
 
-## Hızlı Başlangıç
+Routes: `/` · `/hakkimizda` · `/projeler` · `/projeler/[slug]` · `/iletisim` · `/studio`.
+
+## Setup
 
 ```bash
-# 1. Repoyu klonla
-git clone https://github.com/kullanici/proje-adi.git
-cd proje-adi
-
-# 2. Bağımlılıkları yükle
 npm install
-
-# 3. .env.local içindeki placeholder değerleri gerçek değerlerle doldur
-# (Aşağıdaki "Zorunlu Kurulum Adımları" bölümüne bak)
-
-# 4. Geliştirme sunucusunu başlat
+cp .env.example .env.local   # then fill in the values
 npm run dev
 ```
 
-Tarayıcıda:
 - Site: `http://localhost:3000`
-- Sanity Studio: `http://localhost:3000/studio`
+- Studio: `http://localhost:3000/studio`
 
----
+`.env.local` is git-ignored; only `.env.example` (empty placeholders) is tracked.
 
-## Zorunlu Kurulum Adımları
+### 1. Sanity project
 
-### 1. Sanity Projesi Oluştur
+Create a **separate** Sanity project (or at least a separate dataset) for this demo at [sanity.io/manage](https://sanity.io/manage). Do not reuse the boilerplate's project: demo content would mix with it. Put the ID and dataset in `NEXT_PUBLIC_SANITY_PROJECT_ID` / `NEXT_PUBLIC_SANITY_DATASET`.
 
-1. [sanity.io/manage](https://sanity.io/manage) adresine git
-2. "New Project" → proje adını gir
-3. Proje ID'yi kopyala → `.env.local` içinde `NEXT_PUBLIC_SANITY_PROJECT_ID` değerini güncelle
+### 2. Webhook (on-demand ISR)
 
-### 2. Sanity API Token Al
+Sanity Dashboard → API → Webhooks → Add:
 
-1. Sanity Dashboard → proje → **API** sekmesi
-2. **Tokens** → **Add API Token**
-3. İsim: `Read Token`, Yetki: **Editor**
-4. Token'ı kopyala → `.env.local` içinde `SANITY_API_READ_TOKEN` değerini güncelle
+- URL: `https://<domain>/api/revalidate`, method `POST`
+- Trigger on: Create, Update, Delete. Drafts and versions: off.
+- Secret: the value of `SANITY_WEBHOOK_SECRET` (in the dashboard's Secret field, not as a header).
 
-### 3. Sanity Webhook Kur (ISR için)
-
-1. Sanity Dashboard → proje → **API** → **Webhooks**
-2. **Add Webhook**:
-   - URL: `https://siteadi.com/api/revalidate`
-   - HTTP Method: `POST`
-   - Trigger on: **Create, Update, Delete**
-   - Drafts ve versions: **Kapalı**
-   - Secret: Sanity Dashboard'daki Secret alanına `.env.local`'daki `SANITY_WEBHOOK_SECRET` değerini girin. (Header olarak değil, direkt dashboard'daki Secret kutusuna)
-3. **Filter** alanına aşağıdaki GROQ filtresini ekleyin:
+**Filter** (every document type must be listed here, or its pages never revalidate):
 
 ```groq
 _type in [
@@ -73,18 +44,12 @@ _type in [
   "homePage",
   "aboutPage",
   "contactPage",
-  "blogPage",
-  "servicesPage",
   "projectsPage",
-  "blogPost",
-  "blogCategory",
-  "service",
-  "project",
-  "faq"
+  "project"
 ]
 ```
 
-4. **Projection** alanına aşağıdaki payload sözleşmesini ekleyin:
+**Projection** (required payload contract):
 
 ```groq
 {
@@ -93,8 +58,6 @@ _type in [
   "operation": delta::operation(),
   "slug": after().slug.current,
   "previousSlug": before().slug.current,
-  "categoryId": after().category._ref,
-  "previousCategoryId": before().category._ref,
   "slugChanged": select(
     delta::operation() == "update" => delta::changedAny(slug.current),
     false
@@ -105,89 +68,41 @@ _type in [
   ),
   "affectsList": select(
     delta::operation() != "update" => true,
-    _type == "blogPost" => delta::changedAny((title, slug.current, excerpt, publishedAt, category, mainImage, seo.noIndex)),
-    _type == "service" => delta::changedAny((title, slug.current, mainImage, seo.noIndex)),
-    _type == "project" => delta::changedAny((title, slug.current, mainImage, seo.noIndex)),
+    _type == "project" => delta::changedAny((title, slug.current, mainImage, status, location, summary, plannedDelivery, seo.noIndex)),
     false
   )
 }
 ```
 
-Bu projection zorunludur. Delete olayında eski slug'ı, slug değişikliğinde hem eski hem yeni slug'ı endpoint'e taşır. Sitemap yalnızca create/delete, slug veya `noIndex` değişikliklerinde invalidate edilir.
+`affectsList` names every field the project list/cards read (see `docs/CONTENT-MODEL.md` §4). Update it when list queries change.
 
-5. `.env.local` içinde `SANITY_WEBHOOK_SECRET` değerini güncelleyin. Uygulama `@sanity/webhook` paketi ile imzayı otomatik doğrular.
+### 3. Contact form (SMTP)
 
-### 4. Gmail SMTP Kurulumu (İletişim Formu)
+Fill `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `CONTACT_FORM_TO` in `.env.local`. For Gmail, use an app password (Google Account → Security → 2-Step Verification → App passwords).
 
-1. Google Hesabı → **Güvenlik** → **2 Adımlı Doğrulama** → etkinleştir
-2. **Uygulama Şifreleri** → Uygulama: Mail → Şifreyi kopyala
-3. `.env.local` içinde `SMTP_USER` ve `SMTP_PASS` değerlerini güncelle
+### 4. Deploy
 
----
+Add every `.env.local` variable to the hosting provider, set `NEXT_PUBLIC_SITE_URL` to the production domain (used for canonicals, sitemap, and Open Graph URLs), then register the webhook above.
 
-## Yeni Projede Yapılacaklar Checklist
-
-- [ ] `package.json` içinde `"name"` alanını güncelle
-- [ ] `.env.local` içindeki tüm `your-*` placeholder değerlerini gerçek değerlerle değiştir
-- [ ] `src/app/layout.tsx` içindeki `"Site Adı"` metnini güncelle
-- [ ] `src/app/globals.css` içindeki `:root` bloğundan marka renklerini güncelle
-- [ ] Sanity Studio'yu aç (`/studio`), **Site Ayarları** (Logo, Favicon) ve **Navigasyon** dokümanlarını doldur
-- [ ] Vercel'e deploy et, tüm `.env.local` env değişkenlerini Vercel paneline ekle
-- [ ] Sanity Dashboard → Webhooks: `https://siteadi.com/api/revalidate` ekle
-
----
-
-## Proje Yapısı
+## Structure
 
 ```
 src/
 ├── app/
-│   ├── (site)/           # Kullanıcıya görünen tüm sayfalar
-│   │   ├── blog/[slug]/  # Dinamik blog detay sayfaları
-│   │   ├── page.tsx      # Ana sayfa
-│   │   ├── blog/         # Blog listesi hub sayfası
-│   │   ├── hizmetler/    # Hizmet hub ve [slug] detay sayfaları
-│   │   ├── projeler/     # Proje hub ve [slug] detay sayfaları
-│   │   ├── iletisim/     # İletişim sayfası
-│   ├── api/              # API route'ları
-│   │   ├── revalidate/   # ISR webhook
-│   │   └── contact/      # İletişim formu
-│   ├── studio/           # Sanity Studio (embedded)
-│   ├── layout.tsx        # Root layout
-│   ├── not-found.tsx     # 404 sayfası
-│   ├── sitemap.ts        # Dinamik sitemap
-│   └── robots.ts         # robots.txt
-├── components/
-│   ├── forms/            # ContactForm
-│   ├── layout/           # Header, Footer, vb.
-│   ├── seo/              # JsonLd
-│   └── ui/               # SanityImage, RichText, FAQ, Breadcrumbs, FadeIn
-├── lib/
-│   ├── env.ts            # Type-safe env validasyonu
-│   ├── seo.ts            # buildMetadata()
-│   └── utils.ts          # cn(), getSiteUrl(), formatDate()
-└── sanity/
-    ├── lib/              # client.ts, image.ts, queries.ts
-    ├── plugins/          # singletonPlugin
-    ├── schemaTypes/      # Tüm Sanity şemaları
-    └── structure.ts      # Studio sol panel yapısı
+│   ├── (site)/            # Public pages: home, hakkimizda, projeler, iletisim
+│   ├── api/revalidate/    # Sanity webhook → cache tag revalidation
+│   ├── api/contact/       # Contact form (nodemailer)
+│   ├── studio/            # Embedded Sanity Studio
+│   ├── sitemap.ts, robots.ts, not-found.tsx, error.tsx
+├── components/            # home/, layout/, forms/, seo/, ui/
+├── lib/                   # seo.ts (buildMetadata), utils.ts
+├── sanity/                # lib/ (client, queries, image, slugify), schemaTypes/, structure.ts
+├── styles/                # theme.css (tokens), base.css, utilities.css
+└── types/index.ts
 ```
 
----
+## SEO
 
-## SEO & Yapılandırılmış Veri (Structured Data) Yapılandırması
-
-Bu boilerplate, Google ve diğer arama motorları için en yüksek standartlarda SEO otomasyonuna sahiptir.
-
-### 1. Domain ve Canonical URL Kurulumu (`NEXT_PUBLIC_SITE_URL`)
-*   `.env.local` dosyasındaki `NEXT_PUBLIC_SITE_URL` değişkeni, arama motorlarının canonical (özgün) etiketlerini, sitemap girdilerini ve OpenGraph görsel yollarını oluşturmak için kullanılır.
-*   **Edge-case Koruması:** `getSiteUrl()` fonksiyonu, girilen URL'nin başında `https://` protokolü olmasa bile bunu otomatik algılar, sonundaki `/` işaretlerini temizler ve güvenli şekilde derler.
-
-### 2. Otomatik Yapılandırılmış Veriler (JSON-LD)
-Aşağıdaki zengin arama sonuçları şemaları kod yazmaya gerek kalmadan tamamen otomatik olarak yönetilir:
-*   **Site-wide Organization & WebSite:** Root Layout'ta `siteSettings`'ten gelen logo, iletişim ve sosyal ağ verileriyle otomatik oluşturulur.
-*   **Ekmek Kırıntıları (Breadcrumbs):** İç sayfalarda `<Breadcrumbs>` bileşeni çağrıldığı anda dinamik URL hiyerarşisi üzerinden `BreadcrumbList` şemasını oluşturup sayfaya enjekte eder.
-*   **Taranabilir Sıkça Sorulan Sorular (FAQ):** `<FAQ>` bileşeni kullanıldığında, arama botlarının kapalı cevapları da %100 okuyabilmesi için answers DOM'da saklanır ve `FAQPage` şeması dinamik olarak sayfaya basılır.
-*   **Blog Yazıları:** `blog/[slug]/page.tsx` rotasında dinamik `Article` şeması otomatik olarak basılır.
-*   **Hizmet & Projeler:** İlgili detay sayfalarında `Service` ve `CreativeWork` şemaları otomatik olarak yer alır.
-
+- Metadata through `buildMetadata()` (`src/lib/seo.ts`) with canonical paths.
+- JSON-LD: site-wide `Organization` and `WebSite`; `BreadcrumbList` via `<Breadcrumbs>`; `FAQPage` via `<FAQ>` (answers stay in the DOM); `CreativeWork` on project detail pages.
+- Dynamic sitemap respects each page's `seo.noIndex`.
