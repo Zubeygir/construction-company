@@ -17,11 +17,17 @@ export const imageFields = /* groq */ `{
 // Her sayfada bir kez çekilir — header, footer, global ayarlar
 export const layoutQuery = groq`{
   "settings": *[_type == "siteSettings"][0] {
-    siteName, siteTagline,
+    siteName, siteTagline, copyrightNotice,
     logo ${imageFields},
     logoHeight,
     favicon { asset->{ _id, url } },
     contactInfo { phone, email, address, whatsappNumber, mapIframe },
+    salesOffice {
+      contactName, contactRole,
+      photo ${imageFields},
+      phone, whatsappNumber, workingHours, headline, ctaLabel, whatsappLabel, priceNote,
+      bandImage ${imageFields}
+    },
     socialLinks[] { platform, url },
     gaId, gtmId, googleSearchConsoleId,
     defaultSeo { metaTitle, metaDescription },
@@ -43,13 +49,32 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
     internal->{ _type, "slug": slug.current }
   },
   heroImage ${imageFields},
+  "heroCaption": heroImage.caption,
   aboutTitle, aboutSubtitle, aboutText,
   aboutImage ${imageFields},
   aboutCtaLabel, aboutCtaLink,
-  projectsTitle, projectsSubtitle,
+  projectsTitle, projectsSubtitle, projectsCtaLabel,
   featuredProjects[]-> {
-    title, slug,
+    title, slug, status, location, summary, plannedDelivery, floorCount, unitCount,
+    "unitTypeNames": unitTypes[].name,
     mainImage ${imageFields}
+  },
+  storyTitle, storySubtitle, storyCtaLabel,
+  featuredStoryProject-> {
+    title, slug, location,
+    mainImage ${imageFields},
+    groundClass, landArea,
+    foundationType, concreteClass,
+    floorCount, inspectionFirm, architect,
+    plannedDelivery, actualDelivery, occupancyPermitDate, unitCount
+  },
+  stageGround { title, text },
+  stageFoundation { title, text },
+  stageFrame { title, text },
+  stageHandover { title, text },
+  recordTitle, recordSubtitle,
+  "deliveredProjects": *[_type == "project" && status == "tamamlandi"] | order(coalesce(actualDelivery, plannedDelivery) desc) {
+    title, slug, location, unitCount, plannedDelivery, actualDelivery, occupancyPermitDate
   },
   seo
 }`;
@@ -73,28 +98,47 @@ export const contactPageQuery = groq`*[_type == "contactPage"][0] {
 export const projectsPageQuery = groq`*[_type == "projectsPage"][0] {
   heroTitle, heroSubtitle,
   heroImage ${imageFields},
-  pageTitle, pageSubtitle, ctaLabel, ctaLink, seo
+  pageTitle, pageSubtitle,
+  specsTitle, unitsTitle, amenitiesTitle, galleryTitle, documentsTitle,
+  seo
 }`;
 
 // ─── Projeler ──────────────────────────────────────────────────────────────────
 
-export const projectListQuery = groq`*[_type == "project"] | order(_createdAt asc) {
-  title, slug,
+// Active projects first (on sale → under construction → coming soon → completed), newest delivery first within each.
+const projectOrder = /* groq */ `order(select(status == "satista" => 0, status == "insaatta" => 1, status == "yakinda" => 2, 3) asc, plannedDelivery desc)`;
+
+// Lists stay light: never fetch unitTypes, gallery, or documents here.
+export const projectListQuery = groq`*[_type == "project"] | ${projectOrder} {
+  title, slug, status, location, summary, plannedDelivery,
   mainImage ${imageFields}
 }`;
 
-export const projectFallbackQuery = groq`*[_type == "project"] | order(_createdAt asc)[0...3] {
-  title, slug,
+// Home fallback when no projects are hand-picked: completed ones live in the delivery record instead.
+export const projectFallbackQuery = groq`*[_type == "project" && status != "tamamlandi"] | ${projectOrder}[0...4] {
+  title, slug, status, location, summary, plannedDelivery, floorCount, unitCount,
+  "unitTypeNames": unitTypes[].name,
   mainImage ${imageFields}
 }`;
 
 export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug][0] {
-  title, slug,
+  title, slug, status, location, mapUrl, summary,
   mainImage ${imageFields},
   body[] {
     ...,
     _type == "image" => { asset->{ _id, url, metadata { lqip, dimensions } }, alt, alignment, size, hotspot, crop }
   },
+  startDate, plannedDelivery, actualDelivery, occupancyPermitDate,
+  groundClass, foundationType, concreteClass, inspectionFirm, architect,
+  landArea, floorCount, unitCount,
+  extraSpecs[] { _key, label, value },
+  documents[] { _key, title, "url": file.asset->url },
+  unitTypes[] {
+    _key, name, grossArea, netArea, totalCount, availableCount,
+    floorPlan ${imageFields}
+  },
+  amenities,
+  gallery[] { _key, caption, ...@${imageFields} },
   seo
 }`;
 

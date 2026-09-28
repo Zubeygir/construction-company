@@ -1,129 +1,97 @@
 import { Metadata } from "next";
 import { cachedFetch } from "@/sanity/lib/client";
 import { contactPageQuery } from "@/sanity/lib/queries";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, getLayoutData } from "@/lib/seo";
 import { ContactForm } from "@/components/forms/ContactForm";
-import { PageHero } from "@/components/layout/PageHero";
+import { PageIntro } from "@/components/layout/PageIntro";
+import { SalesContact } from "@/components/sales/SalesContact";
+import { SpecList } from "@/components/ui/SpecList";
+import { CONTACT_LABELS, telHref, whatsappHref } from "@/lib/project";
 import { ContactPage as ContactPageType } from "@/types";
-import { RiPhoneLine, RiMailLine, RiMapPinLine } from "react-icons/ri";
-import { FaWhatsapp } from "react-icons/fa";
 
 export async function generateMetadata(): Promise<Metadata> {
   const data = await cachedFetch<ContactPageType>(contactPageQuery, {}, { next: { tags: ["contact"] } });
   return buildMetadata({
-    title: data?.heroTitle || data?.pageTitle || "İletişim",
+    title: data?.heroTitle || data?.pageTitle,
     canonicalPath: "/iletisim",
     pageSeo: data?.seo,
   });
 }
 
+const valueLink = "underline-offset-4 hover:text-cypress hover:underline";
+
 export default async function ContactPage() {
-  const data = await cachedFetch<ContactPageType>(contactPageQuery, {}, { next: { tags: ["contact"] } });
+  const [data, layout] = await Promise.all([
+    cachedFetch<ContactPageType>(contactPageQuery, {}, { next: { tags: ["contact"] } }),
+    getLayoutData(),
+  ]);
   const contact = data?.contactInfo;
-  const hasContactInfo = Boolean(
-    contact?.phone || contact?.email || contact?.address || contact?.whatsappNumber
-  );
+  const salesOffice = layout?.settings?.salesOffice;
+  const title = data?.heroTitle || data?.pageTitle;
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16 pb-16">
-      {/* Page Hero */}
-      <PageHero
-        title={data?.heroTitle || data?.pageTitle || "İletişim"}
-        subtitle={data?.heroSubtitle || data?.pageSubtitle}
-        backgroundImage={data?.heroImage}
-      />
+    <>
+      {title && <PageIntro title={title} subtitle={data?.heroSubtitle} image={data?.heroImage} />}
 
-      <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto space-y-12">
-          {/* İletişim Bilgileri (Site Ayarlarında tanımlıysa gösterilir) */}
-          {hasContactInfo && (
-            <div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {contact?.phone && (
-                  <a
-                    href={`tel:${contact.phone}`}
-                    className="flex flex-col items-center text-center p-6 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors"
-                  >
-                    <span className="p-3 rounded-full bg-primary/10 text-primary mb-3">
-                      <RiPhoneLine className="size-6" />
-                    </span>
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                      Telefon
-                    </span>
-                    <span className="text-sm font-medium text-foreground">{contact.phone}</span>
-                  </a>
-                )}
+      <div className="page-shell grid gap-16 py-section lg:grid-cols-12 lg:gap-12">
+        {/* The named person comes first; the form is the fallback, never the front door */}
+        {salesOffice && (salesOffice.phone || salesOffice.whatsappNumber) && (
+          <SalesContact salesOffice={salesOffice} className="lg:col-span-6" />
+        )}
 
-                {contact?.email && (
-                  <a
-                    href={`mailto:${contact.email}`}
-                    className="flex flex-col items-center text-center p-6 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors"
-                  >
-                    <span className="p-3 rounded-full bg-primary/10 text-primary mb-3">
-                      <RiMailLine className="size-6" />
-                    </span>
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                      E-posta
-                    </span>
-                    <span className="text-sm font-medium text-foreground">{contact.email}</span>
-                  </a>
-                )}
-
-                {contact?.whatsappNumber && (
-                  <a
-                    href={`https://wa.me/${contact.whatsappNumber.replace(/[^0-9]/g, "")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center text-center p-6 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors"
-                  >
-                    <span className="p-3 rounded-full bg-primary/10 text-primary mb-3">
-                      <FaWhatsapp className="size-6" />
-                    </span>
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                      WhatsApp
-                    </span>
-                    <span className="text-sm font-medium text-foreground">{contact.whatsappNumber}</span>
-                  </a>
-                )}
-
-                {contact?.address && (
-                  <div className="flex flex-col items-center text-center p-6 rounded-xl border border-border bg-card">
-                    <span className="p-3 rounded-full bg-primary/10 text-primary mb-3">
-                      <RiMapPinLine className="size-6" />
-                    </span>
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                      Adres
-                    </span>
-                    <span className="text-sm font-medium text-foreground">{contact.address}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* İletişim Formu (Sanity'de showForm aktifse gösterilir) */}
-          {data?.showForm && (
-            <div className="max-w-2xl mx-auto">
-              <div>
-                <ContactForm
-                  formTitle={data?.formTitle}
-                  successMessage={data?.successMessage}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Harita İframe (Site Ayarlarında tanımlıysa) */}
-          {contact?.mapIframe && (
-            <div>
-              <div
-                className="w-full rounded-2xl overflow-hidden border border-border shadow-sm [&_iframe]:w-full [&_iframe]:h-[380px] [&_iframe]:border-0"
-                dangerouslySetInnerHTML={{ __html: contact.mapIframe }}
-              />
-            </div>
-          )}
+        <div className="flex flex-col gap-10 lg:col-span-5 lg:col-start-8">
+          {data?.pageSubtitle && <p className="max-w-[48ch] text-foreground md:text-xl md:leading-relaxed">{data.pageSubtitle}</p>}
+          <address className="not-italic">
+            <SpecList
+              items={[
+                {
+                  label: CONTACT_LABELS.phone,
+                  value: contact?.phone && (
+                    <a href={telHref(contact.phone)} className={`tabular-nums ${valueLink}`}>
+                      {contact.phone}
+                    </a>
+                  ),
+                },
+                {
+                  label: CONTACT_LABELS.whatsapp,
+                  value: contact?.whatsappNumber && (
+                    <a href={whatsappHref(contact.whatsappNumber)} target="_blank" rel="noopener noreferrer" className={`tabular-nums ${valueLink}`}>
+                      {contact.whatsappNumber}
+                    </a>
+                  ),
+                },
+                {
+                  label: CONTACT_LABELS.email,
+                  value: contact?.email && (
+                    <a href={`mailto:${contact.email}`} className={`break-all ${valueLink}`}>
+                      {contact.email}
+                    </a>
+                  ),
+                },
+                { label: CONTACT_LABELS.address, value: contact?.address && <span className="whitespace-pre-line">{contact.address}</span> },
+                { label: CONTACT_LABELS.hours, value: salesOffice?.workingHours },
+              ]}
+            />
+          </address>
         </div>
       </div>
-    </div>
+
+      {data?.showForm && (
+        <section className="bg-surface py-section">
+          <div className="page-shell grid lg:grid-cols-12">
+            <div className="lg:col-span-8">
+              <ContactForm formTitle={data.formTitle} successMessage={data.successMessage} />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {contact?.mapIframe && (
+        <div
+          className="w-full [&_iframe]:block [&_iframe]:h-[min(60svh,32rem)] [&_iframe]:w-full [&_iframe]:border-0"
+          dangerouslySetInnerHTML={{ __html: contact.mapIframe }}
+        />
+      )}
+    </>
   );
 }

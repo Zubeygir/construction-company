@@ -43,10 +43,10 @@ const components: PortableTextComponents = {
             width={width}
             height={height}
             fit="max"
-            className="w-full h-auto rounded-lg shadow-md"
+            className="w-full h-auto"
           />
           {value.caption && (
-            <figcaption className="mt-2 text-sm text-center text-muted-foreground italic">
+            <figcaption className="mt-2 text-sm text-muted-foreground">
               {value.caption}
             </figcaption>
           )}
@@ -72,11 +72,11 @@ const components: PortableTextComponents = {
     link: ({ value, children }) => {
       const isInternal = value?.href?.startsWith("/");
       return isInternal ? (
-        <Link href={value.href} prefetch={false} className="underline underline-offset-4 hover:text-primary">
+        <Link href={value.href} prefetch={false} className="text-cypress underline underline-offset-4 hover:text-cypress-deep">
           {children}
         </Link>
       ) : (
-        <a href={value.href} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-primary">
+        <a href={value.href} target="_blank" rel="noopener noreferrer" className="text-cypress underline underline-offset-4 hover:text-cypress-deep">
           {children}
         </a>
       );
@@ -87,7 +87,10 @@ const components: PortableTextComponents = {
 export function RichText({ value, className = "" }: { value?: PortableTextBlock[]; className?: string }) {
   if (!value) return null;
   return (
-    <div className={`prose prose-lg max-w-none break-words flow-root ${className}`}>
+    // Typography plugin's gray ramp is swapped for the brand tokens; headings use the headline cut.
+    <div
+      className={`prose prose-lg max-w-none break-words flow-root [--tw-prose-body:var(--ink)] [--tw-prose-headings:var(--ink)] [--tw-prose-bold:var(--ink)] [--tw-prose-links:var(--cypress)] [--tw-prose-quotes:var(--ink)] [--tw-prose-quote-borders:var(--hairline)] [--tw-prose-bullets:var(--muted-text)] [--tw-prose-counters:var(--muted-text)] [--tw-prose-hr:var(--hairline)] [--tw-prose-captions:var(--muted-text)] prose-headings:font-semibold prose-headings:tracking-[-0.01em] prose-headings:[font-variation-settings:'wdth'_115] prose-p:leading-[1.6] ${className}`}
+    >
       <PortableText value={value} components={components} />
     </div>
   );

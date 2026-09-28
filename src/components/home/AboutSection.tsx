@@ -1,8 +1,9 @@
+import Link from "next/link";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { RichText } from "@/components/ui/RichText";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { SanityImage as SanityImageType } from "@/types";
 import type { PortableTextBlock } from "@portabletext/react";
 
@@ -15,65 +16,32 @@ interface AboutSectionProps {
   ctaLink?: string;
 }
 
-export function AboutSection({
-  title,
-  subtitle,
-  text,
-  image,
-  ctaLabel,
-  ctaLink,
-}: AboutSectionProps) {
-  // Graceful fallback values
-  const displayTitle = title || "Hakkımızda";
-  const displayCtaLabel = ctaLabel || "Devamını Oku";
-  const displayCtaLink = ctaLink || "/hakkimizda";
+export function AboutSection({ title, subtitle, text, image, ctaLabel, ctaLink }: AboutSectionProps) {
+  if (!title && !text?.length) return null;
 
+  // Text on the shell's left edge, the photograph bleeding off the right edge: the mirror of the sales band below it
   return (
-    <section className="py-20 md:py-28 overflow-hidden bg-background">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
-          {/* Sol Kolon: Metinler */}
-          <div className="lg:col-span-7 space-y-6">
-            <SectionHeading
-              title={displayTitle}
-              subtitle={subtitle}
-              align="left"
-            />
-
-            {text && text.length > 0 && (
-              <div>
-                <RichText value={text} className="text-muted-foreground" />
-              </div>
-            )}
-
-            <div className="pt-4">
-              <Button size="lg" render={<Link href={displayCtaLink} prefetch={false} />}>
-                {displayCtaLabel}
-              </Button>
-            </div>
-          </div>
-
-          {/* Sağ Kolon: Görsel */}
-          {image && (
-            <div className="lg:col-span-5 relative">
-              <div className="relative">
-                {/* Decorative Elements for premium look */}
-                <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-primary/20 to-transparent blur-2xl z-0" />
-                <div className="relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl z-10 border bg-card">
-                  <SanityImage
-                    image={image}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 40vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-        </div>
+    <section aria-labelledby={title ? "about-title" : undefined} className="grid lg:grid-cols-12 lg:items-stretch">
+      <div
+        className={cn(
+          "page-shell flex flex-col justify-center py-section lg:mx-0 lg:max-w-none lg:pr-16 lg:pl-[max(var(--gutter),calc((100vw_-_var(--shell))/2_+_var(--gutter)))]",
+          image ? "lg:col-span-6" : "lg:col-span-8"
+        )}
+      >
+        {title && <SectionHeading id="about-title" title={title} subtitle={subtitle} />}
+        {text && text.length > 0 && <RichText value={text} className="mt-8 max-w-[62ch]" />}
+        {ctaLabel && ctaLink && (
+          <Button variant="outline" size="lg" className="mt-10 self-start" render={<Link href={ctaLink} prefetch={false} />}>
+            {ctaLabel}
+          </Button>
+        )}
       </div>
+
+      {image && (
+        <div className="relative aspect-[4/5] overflow-hidden bg-surface sm:aspect-[3/2] lg:col-span-6 lg:aspect-auto lg:min-h-[44rem]">
+          <SanityImage image={image} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+        </div>
+      )}
     </section>
   );
 }

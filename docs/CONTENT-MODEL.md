@@ -1,6 +1,6 @@
 # Content Model
 
-Schema spec for the residential-developer demo. Decided with the user; not yet implemented. Strategy behind these fields lives in `docs/PRODUCT.md` (see "Content policy"). Follow the boilerplate rules in `CLAUDE.md` when implementing (Turkish titles, `turkishSlugify`, `${imageFields}`, types in `src/types/index.ts`, `initialValue` on every field).
+Schema spec for the residential-developer demo. Decided with the user; §1, §2, §4, §5 implemented (2026-09-28), §3 pending the home shape brief. Gallery items are projected as `{ _key, caption, ...@${imageFields} }` so the shared fragment stays the single image projection. Strategy behind these fields lives in `docs/PRODUCT.md` (see "Content policy"). Follow the boilerplate rules in `CLAUDE.md` when implementing (Turkish titles, `turkishSlugify`, `${imageFields}`, types in `src/types/index.ts`, `initialValue` on every field).
 
 ## 1. `project` (document, extend existing `src/sanity/schemaTypes/documents/project.ts`)
 
@@ -12,7 +12,7 @@ Split into Studio field groups so editors don't get lost: `genel` (Genel, defaul
 | `title` | Başlık | string | (existing) | required |
 | `slug` | Slug | slug | (existing) | required, `turkishSlugify` |
 | `status` | Durum | string, radio: `yakinda` Yakında · `satista` Satışta · `insaatta` İnşaat Halinde · `tamamlandi` Tamamlandı | `satista` | required. Drives the Lamp "Satışta" tag. |
-| `location` | Konum | string | `Urla, İzmir` | district/neighbourhood label |
+| `location` | Konum | string | `Bakırköy, İstanbul` | district/neighbourhood label |
 | `mapUrl` | Harita Linki | url | none | optional Google Maps link |
 | `summary` | Kısa Özet | text (rows 3) | a sample sentence | max 160 chars; used in lists and meta fallback |
 | `mainImage` | Ana Görsel | image | (existing) | required |
@@ -72,13 +72,23 @@ Added to `layoutQuery` (fetched once per page), with `photo ${imageFields}`.
 
 Also set initialValues on the existing identity fields: `siteName` → `Tınaz Yapı`, `siteTagline` → `Adımızı kapıya yazıyoruz.` (identity source: `docs/PRODUCT.md` → Brand Identity).
 
-## 3. Home: construction story (proposal, finalize in the home shape brief)
+## 3. Home (implemented 2026-09-28 with the home brief)
 
 The mid-page Construction Story (see `docs/DESIGN.md` → Components) pulls its data from one real project.
 
-- `homePage.featuredStoryProject`: reference → `project`.
-- `homePage.storyTitle` / `storySubtitle`: strings with initialValues.
+- `homePage.featuredStoryProject`: reference → `project`, filtered to `status == "tamamlandi"`. Empty → the section is not rendered.
+- `homePage.storyTitle` / `storySubtitle` / `storyCtaLabel`: strings with initialValues.
 - Four fixed stage objects (fixed, not an array, because the 3D choreography expects exactly four): `stageGround`, `stageFoundation`, `stageFrame`, `stageHandover`, each `{ title: string, text: text }` with initialValues.
+- `homePage.recordTitle` / `recordSubtitle`: delivery record heading. The list itself is every `tamamlandi` project, newest delivery first (`deliveredProjects` in `homePageQuery`); none → section hidden.
+- `homePage.projectsCtaLabel`: "Tüm projeler" link. Without hand-picked `featuredProjects`, the home shows up to four non-completed projects in status order.
+- `homePage.heroImage.caption`: small caption on the hero photo. The hero's primary CTA always calls the sales office; `heroCtaLabel` / `heroCtaLink` are the secondary button (initialValue `/projeler`).
+- `siteSettings.salesOffice.headline` / `whatsappLabel`: added for the shared sales office band (`SalesOfficeBand`).
+- `siteSettings.copyrightNotice` (Telif Metni, initialValue `Tüm hakları saklıdır.`): the footer's copyright text after the year and site name (added 2026-09-28).
+- `siteSettings.salesOffice.bandImage` (Bant Görseli, image with alt, no initialValue): the photo beside the sales office band; empty → the band falls back to its text-only layout (added 2026-09-28).
+- Home lead project lists also project `floorCount`, `unitCount`, and `"unitTypeNames": unitTypes[].name` (names only, still light).
+- `projectsPage`: `ctaLabel` / `ctaLink` removed (the boilerplate CTA box is gone). New group "Proje Detay Başlıkları": `specsTitle`, `unitsTitle`, `amenitiesTitle`, `galleryTitle`, `documentsTitle`, shared by every project page.
+- `aboutPage` / `contactPage` / `projectsPage`: Bakırköy initialValues on hero, title and body fields; stale "degrade arka plan" descriptions replaced.
+- Spec-sheet keys ("Zemin sınıfı", "Beton sınıfı", …), unit and contact labels, and status labels live in `src/lib/project.ts`, shared by Studio and site. They label schema fields, like Studio titles; they are not editorial content.
 
 Stage ↔ data mapping (data from the referenced project; rows with empty values are not rendered):
 | Stage | Data shown |

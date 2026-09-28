@@ -71,7 +71,7 @@ export async function buildMetadata(params: BuildMetadataParams = {}): Promise<M
     (params.canonicalPath ? `${siteUrl}${params.canonicalPath}` : undefined);
   const noIndex = params.pageSeo?.noIndex || params.noIndex || false;
 
-  const faviconUrl = settings?.favicon?.asset?.url || "/favicon.ico";
+  const faviconUrl = settings?.favicon?.asset?.url || "/icon.svg";
   const ogImageUrl = ogImageSource
     ? urlForImage(ogImageSource)?.width(1200).height(630).url()
     : undefined;

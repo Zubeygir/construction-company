@@ -31,7 +31,7 @@ Success: a visitor can understand a project, believe the firm will deliver it, a
 
 ## Brand Personality
 
-Rooted, personal, candid. A local family firm that has built in this city for decades and puts its name on every building. Warm but not sentimental; confident but never boastful. It proves rather than claims: dates, documents, and finished buildings instead of counters and superlatives. The emotional goal is calm confidence: "these people will still be here after the keys are handed over."
+Rooted, personal, candid. A local family firm that has built in this district for decades and puts its name on every building. Warm but not sentimental; confident but never boastful. It proves rather than claims: dates, documents, and finished buildings instead of counters and superlatives. The emotional goal is calm confidence: "these people will still be here after the keys are handed over."
 
 ## Brand Identity (demo firm)
 
@@ -39,8 +39,8 @@ Fictional; replaced per client. Checked 2026-09-28: no known firm named exactly 
 
 - **Name:** Tınaz Yapı. Uppercase is "TINAZ YAPI" (Turkish ı → I, no dot).
 - **Tagline:** "Adımızı kapıya yazıyoruz."
-- **City:** Urla, İzmir. Local zoning keeps projects low-rise: 2–4 storey buildings of 6–24 homes, and villa groups. No towers.
-- **Origin:** Founded in 1981 by **Hasan Tınaz**, a stonemason who started by repairing Urla's old stone houses and went on to build his own. Today the firm is run by his daughter **Elif Tınaz**, a civil engineer. The story is the handover from master craftsman to engineer: handwork plus engineering transparency.
+- **City:** Bakırköy, İstanbul (one district: Kartaltepe, Cevizlik, Zeytinlik, Osmaniye, Sakızağacı, Şenlikköy, Yeşilköy). Changed from Urla on 2026-09-28. The core business is urban renewal (kentsel dönüşüm) of 1960s–70s apartment parcels: 4–8 storey apartment buildings of 8–30 homes. No towers. Much of coastal Bakırköy sits on soft alluvial ground (ZC/ZD), so openly published ground class and foundation data is the firm's strongest proof.
+- **Origin:** Founded in 1981 by **Hasan Tınaz**, a kalfa (master builder) who put up his first apartment building in Bakırköy that year and stayed in the district. Today the firm is run by his daughter **Elif Tınaz**, a civil engineer, who rebuilds the neighbourhood's aging stock under urban renewal. The story is the handover from master builder to engineer: handwork plus engineering transparency.
 - **Sales office contact:** **Deniz Aksoy** (the named person in Site Settings).
 - **Where the founding year lives:** inside the story on the About page, never as an "est. 1981" badge, logo line, or eyebrow.
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { z } from "zod";
+import { RiErrorWarningLine, RiCheckLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,10 +25,18 @@ type ContactFormProps = {
   successMessage?: string;
 };
 
-export function ContactForm({
-  formTitle = "Bize Ulaşın",
-  successMessage = "Mesajınız alındı. En kısa sürede size dönüş yapacağız.",
-}: ContactFormProps) {
+// Errors are words plus an icon, never color alone (docs/DESIGN.md → Inputs).
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
+  return (
+    <p id={id} className="flex items-center gap-1.5 text-base text-destructive">
+      <RiErrorWarningLine aria-hidden className="size-5 shrink-0" />
+      {message}
+    </p>
+  );
+}
+
+export function ContactForm({ formTitle, successMessage }: ContactFormProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formData, setFormData] = useState<FormData>({
@@ -89,104 +98,102 @@ export function ContactForm({
 
   if (status === "success") {
     return (
-      <div className="rounded-lg border bg-card p-8 text-center">
-        <div className="text-4xl mb-4">✅</div>
-        <p className="text-lg font-medium">{successMessage}</p>
+      <div role="status" className="flex items-start gap-3 border-t border-cypress pt-6">
+        <RiCheckLine aria-hidden className="mt-0.5 size-6 shrink-0 text-cypress" />
+        <p className="type-title text-foreground">{successMessage}</p>
       </div>
     );
   }
 
+  const describedBy = (field: keyof FormData) => (fieldErrors[field] ? `${field}-error` : undefined);
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-      {formTitle && <h2 className="text-2xl font-bold">{formTitle}</h2>}
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
+      {formTitle && <h2 className="type-headline text-foreground">{formTitle}</h2>}
 
       {/* Honeypot — spam botları için gizli alan */}
       <div className="absolute opacity-0 pointer-events-none h-0 overflow-hidden" aria-hidden="true">
         <input name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="name">Ad Soyad *</Label>
           <Input
             id="name"
             name="name"
+            autoComplete="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder="Adınız Soyadınız"
             aria-invalid={!!fieldErrors.name}
+            aria-describedby={describedBy("name")}
           />
-          {fieldErrors.name && (
-            <p className="text-sm text-destructive">{fieldErrors.name[0]}</p>
-          )}
+          <FieldError id="name-error" message={fieldErrors.name?.[0]} />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">E-posta *</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="ornek@mail.com"
-            aria-invalid={!!fieldErrors.email}
-          />
-          {fieldErrors.email && (
-            <p className="text-sm text-destructive">{fieldErrors.email[0]}</p>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="phone">Telefon</Label>
           <Input
             id="phone"
             name="phone"
             type="tel"
+            autoComplete="tel"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="+90 555 000 00 00"
           />
         </div>
+      </div>
 
-        <div className="space-y-2">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="email">E-posta *</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            value={formData.email}
+            onChange={handleChange}
+            aria-invalid={!!fieldErrors.email}
+            aria-describedby={describedBy("email")}
+          />
+          <FieldError id="email-error" message={fieldErrors.email?.[0]} />
+        </div>
+
+        <div className="flex flex-col gap-2">
           <Label htmlFor="subject">Konu</Label>
           <Input
             id="subject"
             name="subject"
             value={formData.subject}
             onChange={handleChange}
-            placeholder="Mesajınızın konusu"
           />
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         <Label htmlFor="message">Mesaj *</Label>
         <Textarea
           id="message"
           name="message"
           value={formData.message}
           onChange={handleChange}
-          placeholder="Mesajınızı buraya yazın..."
           rows={6}
           aria-invalid={!!fieldErrors.message}
+          aria-describedby={describedBy("message")}
         />
-        {fieldErrors.message && (
-          <p className="text-sm text-destructive">{fieldErrors.message[0]}</p>
-        )}
+        <FieldError id="message-error" message={fieldErrors.message?.[0]} />
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-destructive">
-          Bir hata oluştu. Lütfen tekrar deneyin.
+        <p role="alert" className="flex items-center gap-1.5 text-destructive">
+          <RiErrorWarningLine aria-hidden className="size-5 shrink-0" />
+          Mesaj gönderilemedi. Lütfen tekrar deneyin ya da satış ofisini arayın.
         </p>
       )}
 
-      <Button type="submit" disabled={status === "loading"} className="w-full sm:w-auto">
-        {status === "loading" ? "Gönderiliyor..." : "Gönder"}
+      <Button type="submit" size="lg" disabled={status === "loading"} className="self-start">
+        {status === "loading" ? "Gönderiliyor…" : "Gönder"}
       </Button>
     </form>
   );

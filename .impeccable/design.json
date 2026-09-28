@@ -1,0 +1,427 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-28T09:27:21.462Z",
+  "title": "Design System: Tınaz Yapı",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.25 0 0)",
+          "oklch(0.35 0 0)",
+          "oklch(0.45 0 0)",
+          "oklch(0.55 0 0)",
+          "oklch(0.65 0 0)",
+          "oklch(0.8 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "oklch(0.967 0.006 150)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 150)",
+          "oklch(0.25 0.006 150)",
+          "oklch(0.35 0.006 150)",
+          "oklch(0.45 0.006 150)",
+          "oklch(0.55 0.006 150)",
+          "oklch(0.65 0.006 150)",
+          "oklch(0.8 0.006 150)",
+          "oklch(0.95 0.006 150)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Border",
+        "canonical": "oklch(0.905 0.01 150)",
+        "tonalRamp": [
+          "oklch(0.15 0.01 150)",
+          "oklch(0.25 0.01 150)",
+          "oklch(0.35 0.01 150)",
+          "oklch(0.45 0.01 150)",
+          "oklch(0.55 0.01 150)",
+          "oklch(0.65 0.01 150)",
+          "oklch(0.8 0.01 150)",
+          "oklch(0.95 0.01 150)"
+        ]
+      },
+      "control-border": {
+        "role": "neutral",
+        "displayName": "Control Border",
+        "canonical": "oklch(0.62 0.02 150)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 150)",
+          "oklch(0.25 0.02 150)",
+          "oklch(0.35 0.02 150)",
+          "oklch(0.45 0.02 150)",
+          "oklch(0.55 0.02 150)",
+          "oklch(0.65 0.02 150)",
+          "oklch(0.8 0.02 150)",
+          "oklch(0.95 0.02 150)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(0.225 0.018 150)",
+        "tonalRamp": [
+          "oklch(0.15 0.018 150)",
+          "oklch(0.25 0.018 150)",
+          "oklch(0.35 0.018 150)",
+          "oklch(0.45 0.018 150)",
+          "oklch(0.55 0.018 150)",
+          "oklch(0.65 0.018 150)",
+          "oklch(0.8 0.018 150)",
+          "oklch(0.95 0.018 150)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "oklch(0.47 0.02 150)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 150)",
+          "oklch(0.25 0.02 150)",
+          "oklch(0.35 0.02 150)",
+          "oklch(0.45 0.02 150)",
+          "oklch(0.55 0.02 150)",
+          "oklch(0.65 0.02 150)",
+          "oklch(0.8 0.02 150)",
+          "oklch(0.95 0.02 150)"
+        ]
+      },
+      "cypress": {
+        "role": "primary",
+        "displayName": "Cypress",
+        "canonical": "oklch(0.33 0.065 148)",
+        "tonalRamp": [
+          "oklch(0.15 0.065 148)",
+          "oklch(0.25 0.065 148)",
+          "oklch(0.35 0.065 148)",
+          "oklch(0.45 0.065 148)",
+          "oklch(0.55 0.065 148)",
+          "oklch(0.65 0.065 148)",
+          "oklch(0.8 0.065 148)",
+          "oklch(0.95 0.065 148)"
+        ]
+      },
+      "cypress-deep": {
+        "role": "primary",
+        "displayName": "Deep Cypress",
+        "canonical": "oklch(0.255 0.05 148)",
+        "tonalRamp": [
+          "oklch(0.15 0.05 148)",
+          "oklch(0.25 0.05 148)",
+          "oklch(0.35 0.05 148)",
+          "oklch(0.45 0.05 148)",
+          "oklch(0.55 0.05 148)",
+          "oklch(0.65 0.05 148)",
+          "oklch(0.8 0.05 148)",
+          "oklch(0.95 0.05 148)"
+        ]
+      },
+      "on-cypress": {
+        "role": "neutral",
+        "displayName": "On Cypress",
+        "canonical": "oklch(0.975 0.008 148)",
+        "tonalRamp": [
+          "oklch(0.15 0.008 148)",
+          "oklch(0.25 0.008 148)",
+          "oklch(0.35 0.008 148)",
+          "oklch(0.45 0.008 148)",
+          "oklch(0.55 0.008 148)",
+          "oklch(0.65 0.008 148)",
+          "oklch(0.8 0.008 148)",
+          "oklch(0.95 0.008 148)"
+        ]
+      },
+      "on-cypress-muted": {
+        "role": "neutral",
+        "displayName": "On Cypress Muted",
+        "canonical": "oklch(0.8 0.03 148)",
+        "tonalRamp": [
+          "oklch(0.15 0.03 148)",
+          "oklch(0.25 0.03 148)",
+          "oklch(0.35 0.03 148)",
+          "oklch(0.45 0.03 148)",
+          "oklch(0.55 0.03 148)",
+          "oklch(0.65 0.03 148)",
+          "oklch(0.8 0.03 148)",
+          "oklch(0.95 0.03 148)"
+        ]
+      },
+      "lamp": {
+        "role": "secondary",
+        "displayName": "Lamp (2700K tungsten)",
+        "canonical": "oklch(0.8 0.14 64)",
+        "tonalRamp": [
+          "oklch(0.15 0.14 64)",
+          "oklch(0.25 0.14 64)",
+          "oklch(0.35 0.14 64)",
+          "oklch(0.45 0.14 64)",
+          "oklch(0.55 0.14 64)",
+          "oklch(0.65 0.14 64)",
+          "oklch(0.8 0.14 64)",
+          "oklch(0.95 0.14 64)"
+        ]
+      },
+      "lamp-bright": {
+        "role": "secondary",
+        "displayName": "Lamp Bright",
+        "canonical": "oklch(0.87 0.09 70)",
+        "tonalRamp": [
+          "oklch(0.15 0.09 70)",
+          "oklch(0.25 0.09 70)",
+          "oklch(0.35 0.09 70)",
+          "oklch(0.45 0.09 70)",
+          "oklch(0.55 0.09 70)",
+          "oklch(0.65 0.09 70)",
+          "oklch(0.8 0.09 70)",
+          "oklch(0.95 0.09 70)"
+        ]
+      },
+      "danger": {
+        "role": "neutral",
+        "displayName": "Danger",
+        "canonical": "oklch(0.54 0.19 28)",
+        "tonalRamp": [
+          "oklch(0.15 0.19 28)",
+          "oklch(0.25 0.19 28)",
+          "oklch(0.35 0.19 28)",
+          "oklch(0.45 0.19 28)",
+          "oklch(0.55 0.19 28)",
+          "oklch(0.65 0.19 28)",
+          "oklch(0.8 0.19 28)",
+          "oklch(0.95 0.19 28)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (nameplate)",
+        "purpose": "Page H1 and the Construction Story's stage titles only. wdth 112 below 480px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section H2, the lead project's name, the sales phone number, unit-type names."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Project names in rows and the ledger, the contact name, FAQ questions, mobile-menu links."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All prose at 18px for an older audience; max 68ch; tabular figures for numbers."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Spec-sheet keys, status tags, form labels, button text, the stage counter. Uppercase allowed here only."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "The one easing curve for every transition."
+      },
+      {
+        "name": "duration-state",
+        "value": "200ms",
+        "purpose": "Color and state changes on buttons, links, fields."
+      },
+      {
+        "name": "duration-menu",
+        "value": "200-250ms",
+        "purpose": "Dropdowns and the mobile menu (fade plus a 6-8px slide)."
+      },
+      {
+        "name": "duration-accordion",
+        "value": "300ms",
+        "purpose": "FAQ answer height."
+      },
+      {
+        "name": "duration-image-hover",
+        "value": "500ms",
+        "purpose": "Image scale 1.02 on row and gallery hover (motion-safe)."
+      },
+      {
+        "name": "duration-dusk",
+        "value": "900ms",
+        "purpose": "Construction Story white-to-cypress dusk transition (registered @property colors)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "480px",
+        "note": "display width steps 112 → 125"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px",
+        "note": "header 64 → 80px; Construction Story phone behaviour ends"
+      },
+      {
+        "name": "lg",
+        "value": "1024px",
+        "note": "12-column asymmetric layouts; Construction Story sticky split"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      },
+      {
+        "name": "shell",
+        "value": "1440px",
+        "note": "page-shell max width (90rem)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Lamp Button (primary)",
+      "kind": "button",
+      "refersTo": "button-lamp",
+      "description": "The single sales-office call per screen. The light brightens on hover, never darkens.",
+      "html": "<button class=\"ds-btn-lamp\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M9.366 10.682a10.556 10.556 0 0 0 3.952 3.952l.884-1.238a1 1 0 0 1 1.294-.296 11.422 11.422 0 0 0 4.583 1.364 1 1 0 0 1 .921.997v4.462a1 1 0 0 1-.898.995A15.51 15.51 0 0 1 18.5 21C9.94 21 3 14.06 3 5.5c0-.54.028-1.073.082-1.602A1 1 0 0 1 4.077 3h4.462a1 1 0 0 1 .997.921A11.422 11.422 0 0 0 10.9 8.504a1 1 0 0 1-.296 1.294l-1.238.884Z\"/></svg>Satış ofisini arayın</button>",
+      "css": ".ds-btn-lamp { font-family: Archivo, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.04em; font-variation-settings: 'wdth' 112; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 20px; border: 1px solid transparent; border-radius: 2px; cursor: pointer; transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1); background: var(--lamp); color: var(--cypress-deep); } .ds-btn-lamp:hover { background: var(--lamp-bright); } .ds-btn-lamp:focus-visible { outline: 2px solid var(--cypress); outline-offset: 2px; } .ds-btn-lamp:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Outline Button (secondary)",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action on white: the hero's projects link, WhatsApp.",
+      "html": "<button class=\"ds-btn-outline\">Projelerimiz</button>",
+      "css": ".ds-btn-outline { font-family: Archivo, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.04em; font-variation-settings: 'wdth' 112; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 20px; border: 1px solid transparent; border-radius: 2px; cursor: pointer; transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1); background: transparent; border-color: var(--cypress); color: var(--cypress); } .ds-btn-outline:hover { background: var(--surface); } .ds-btn-outline:focus-visible { outline: 2px solid var(--cypress); outline-offset: 2px; } .ds-btn-outline:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "On Cypress Button",
+      "kind": "button",
+      "refersTo": "button-on-cypress",
+      "description": "Secondary action inside the cypress sales office band.",
+      "html": "<div class=\"ds-cypress-stage\"><button class=\"ds-btn-on-cypress\">WhatsApp'tan yazın</button></div>",
+      "css": ".ds-cypress-stage { background: var(--cypress); padding: 24px; } .ds-btn-on-cypress { font-family: Archivo, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.04em; font-variation-settings: 'wdth' 112; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 20px; border: 1px solid transparent; border-radius: 2px; cursor: pointer; transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1); background: transparent; border-color: var(--on-cypress); color: var(--on-cypress); } .ds-btn-on-cypress:hover { background: var(--cypress-deep); } .ds-btn-on-cypress:focus-visible { outline: 2px solid var(--on-cypress); outline-offset: 2px; }"
+    },
+    {
+      "name": "Solid Button (form submit)",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "The contact form's submit only; a form is not a call, so it does not take the lamp.",
+      "html": "<button class=\"ds-btn-solid\">Gönder</button>",
+      "css": ".ds-btn-solid { font-family: Archivo, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.04em; font-variation-settings: 'wdth' 112; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 20px; border: 1px solid transparent; border-radius: 2px; cursor: pointer; transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1); background: var(--cypress); color: var(--on-cypress); } .ds-btn-solid:hover { background: var(--cypress-deep); } .ds-btn-solid:focus-visible { outline: 2px solid var(--cypress); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "48px field, 18px text (no iOS zoom), label above in Label type.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Ad Soyad</span><input class=\"ds-input\" placeholder=\"Adınız ve soyadınız\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; max-width: 24rem; } .ds-field-label { font-family: Archivo, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.04em; font-variation-settings: 'wdth' 112; color: var(--ink); } .ds-input { font-family: Archivo, system-ui, sans-serif; height: 48px; padding: 8px 12px; font-size: 1.125rem; color: var(--ink); background: var(--bg); border: 1px solid var(--control-border); border-radius: 2px; outline: none; transition: border-color 200ms; } .ds-input::placeholder { color: var(--muted-text); } .ds-input:focus-visible { border-color: var(--cypress); outline: 2px solid var(--cypress); outline-offset: 0; }"
+    },
+    {
+      "name": "Status Tags",
+      "kind": "chip",
+      "refersTo": "status-tag-selling",
+      "description": "Only Satışta carries the lamp; the word, not the color, carries the meaning.",
+      "html": "<div class=\"ds-tags\"><span class=\"ds-tag ds-tag-selling\">Satışta</span><span class=\"ds-tag\">İnşaat Halinde</span><span class=\"ds-tag\">Tamamlandı</span></div>",
+      "css": ".ds-tags { display: flex; gap: 12px; flex-wrap: wrap; } .ds-tag { font-family: Archivo, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.04em; font-variation-settings: 'wdth' 112; text-transform: uppercase; padding: 4px 8px; border-radius: 2px; background: var(--surface); color: var(--ink); } .ds-tag-selling { background: var(--lamp); color: var(--cypress-deep); }"
+    },
+    {
+      "name": "Spec List (Künye)",
+      "kind": "custom",
+      "refersTo": "spec-list",
+      "description": "Site-information-board rows: Label key, medium value, hairline rules. Empty values are dropped.",
+      "html": "<dl class=\"ds-spec\"><div class=\"ds-spec-row\"><dt>Zemin sınıfı</dt><dd>ZC</dd></div><div class=\"ds-spec-row\"><dt>Beton sınıfı</dt><dd>C35</dd></div><div class=\"ds-spec-row\"><dt>Yapı denetim</dt><dd>Marmara Yapı Denetim</dd></div></dl>",
+      "css": ".ds-spec { font-family: Archivo, system-ui, sans-serif; margin: 0; max-width: 34rem; border-top: 1px solid var(--hairline); } .ds-spec-row { display: grid; grid-template-columns: minmax(8rem, 2fr) 3fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--hairline); } .ds-spec dt { font-family: Archivo, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.04em; font-variation-settings: 'wdth' 112; text-transform: uppercase; color: var(--muted-text); align-self: center; } .ds-spec dd { margin: 0; font-size: 1.125rem; font-weight: 500; color: var(--ink); }"
+    },
+    {
+      "name": "Header",
+      "kind": "nav",
+      "refersTo": "header",
+      "description": "Sticky white bar with a hairline, the set wordmark, nav, and the sales phone as a text link.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-wordmark\" href=\"#\"><span class=\"ds-wm-1\">TINAZ</span><span class=\"ds-wm-2\">YAPI</span></a><nav class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-link ds-nav-active\">Projeler</a><a href=\"#\" class=\"ds-nav-link\">Hakkımızda</a><a href=\"#\" class=\"ds-nav-link\">İletişim</a><a href=\"#\" class=\"ds-phone\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M9.366 10.682a10.556 10.556 0 0 0 3.952 3.952l.884-1.238a1 1 0 0 1 1.294-.296 11.422 11.422 0 0 0 4.583 1.364 1 1 0 0 1 .921.997v4.462a1 1 0 0 1-.898.995A15.51 15.51 0 0 1 18.5 21C9.94 21 3 14.06 3 5.5c0-.54.028-1.073.082-1.602A1 1 0 0 1 4.077 3h4.462a1 1 0 0 1 .997.921A11.422 11.422 0 0 0 10.9 8.504a1 1 0 0 1-.296 1.294l-1.238.884Z\"/></svg>0212 000 00 00</a></nav></header>",
+      "css": ".ds-header { font-family: Archivo, system-ui, sans-serif; display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 80px; padding: 0 24px; background: var(--bg); border-bottom: 1px solid var(--hairline); color: var(--ink); } .ds-wordmark { display: flex; flex-direction: column; line-height: 1; color: var(--ink); text-decoration: none; } .ds-wm-1 { font-size: 1.625rem; font-weight: 700; letter-spacing: -0.01em; font-variation-settings: 'wdth' 125; } .ds-wm-2 { margin-top: 4px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; font-variation-settings: 'wdth' 112; } .ds-nav { display: flex; align-items: center; gap: 28px; font-size: 1.125rem; } .ds-nav-link { color: var(--ink); text-decoration: none; text-underline-offset: 6px; text-decoration-thickness: 2px; transition: color 200ms; } .ds-nav-link:hover { color: var(--cypress); text-decoration: underline; } .ds-nav-active { color: var(--cypress); text-decoration: underline; } .ds-phone { display: inline-flex; align-items: center; gap: 8px; margin-left: 12px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); text-decoration: none; } .ds-phone svg { color: var(--cypress); } .ds-phone:hover { color: var(--cypress); text-decoration: underline; text-underline-offset: 4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lit Window",
+    "overview": "The whole system is built around one moment: a finished building at dusk, its windows lighting up one by one. Deep green is the rooted, local ground; tungsten lamp amber is the single sign of life. Everything else is white space and real photography.\n\nThe voice is a mid-century Turkish apartment nameplate: wide, sturdy, proud letters cast in brass above a terrazzo entrance. A family that builds here puts its name on the door. The type carries that pride; the color carries warmth; neither shouts.\n\nThe site's single choreographed moment is the Construction Story section mid-page: a three.js architectural model that assembles as the visitor scrolls and ends in dusk. The rest of the site is calm (Responsive motion: feedback and transitions only).",
+    "keyCharacteristics": [
+      "Pure white reading surface; photography and renders are the content.",
+      "One committed brand color (cypress) on large, deliberate surfaces; one rare accent (lamp).",
+      "A single variable family (Archivo) whose width axis does the work a second typeface would.",
+      "Near-square corners, architectural precision, flat surfaces, hairline-ruled rows instead of cards.",
+      "One choreographed section; everywhere else, quiet."
+    ],
+    "rules": [
+      {
+        "name": "The One Lamp Rule",
+        "body": "Lamp is light, not decoration. It appears only where something is alive or actionable: the primary CTA, an available unit, a lit window. If two lamp elements compete on one screen, remove one.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Gold Rule",
+        "body": "Lamp is never rendered metallic: no gradients, no sheen, no pairing with serif or script type, no black backgrounds. Cypress plus metallic gold is a private bank; cypress plus lamp light is a home.",
+        "section": "colors"
+      },
+      {
+        "name": "The Lamp-Is-Never-Text Rule",
+        "body": "Lamp on white is 1.92:1. It is a fill or a light source, never a text or icon color on light surfaces. On cypress it may be text (6.18:1).",
+        "section": "colors"
+      },
+      {
+        "name": "The Nameplate Rule",
+        "body": "Width 125 is reserved for display and the wordmark. If body copy or buttons start going wide, the nameplate stops meaning anything.",
+        "section": "typography"
+      },
+      {
+        "name": "The Turkish Overflow Rule",
+        "body": "Expanded type plus long Turkish words (\"Projelerimiz\", \"Sürdürülebilirlik\") overflows narrow screens. Every display heading is tested at 360px; below 480px, display steps down to wdth 112 (the `--display-wdth` token), and display headings carry `break-words`. Pages set `lang=\"tr\"` so `text-transform: uppercase` produces İ, not I.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Eyebrow Rule",
+        "body": "No small uppercase kicker above section headings. Labels label data, not sections. (`SectionHeading` still accepts `eyebrow` for future clients; it stays unused here.)",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Paper Rule",
+        "body": "If a card needs a shadow to be seen, the layout is wrong. Fix the spacing or the surface tone instead.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do let photography carry warmth. White (oklch(1 0 0)) behind every project image.",
+      "Do use the Lamp fill with Deep Cypress text for the single primary CTA; brighten to Lamp Bright on hover.",
+      "Do keep corners near-square: 0 for images and sections, 2px for buttons, inputs, and tags, 4px maximum anywhere.",
+      "Do back every trust claim with checkable data in Label + Body spec rows (dates, concrete class, inspection firm, occupancy permit).",
+      "Do build lists as hairline-ruled rows with one stretched link per item.",
+      "Do keep every button at 48px and every icon-only control at 44px or more; the audience includes older buyers.",
+      "Do give every motion a `prefers-reduced-motion` alternative; the Construction Story shows its final lit frame.",
+      "Do keep the Construction Story unpinned on mobile: stages flow in normal scroll, the model updates per stage."
+    ],
+    "donts": [
+      "Don't build the classic Turkish contractor site: full-screen slider, three icon service cards, \"25+ Yıl / 5000+ Konut\" counters, orange-and-navy.",
+      "Don't drift into luxury real-estate gloss: black and gold, script fonts, \"prestij\" and \"ayrıcalık\" copy, drone-video hero.",
+      "Don't look like a cold corporate holding: gray-blue palette, stock handshake photos, investor-relations tone.",
+      "Don't use SaaS landing tropes: gradients, glassmorphism, rounded cards over 4px, \"Get started\" energy.",
+      "Don't fall into the AI boutique-family reflex: cream or sand background, italic display serif, \"est. 19xx\" eyebrows, editorial-magazine layout.",
+      "Don't pin or scroll-drive the hero. The page scrolls from the first pixel.",
+      "Don't put a dark overlay or gradient over a photo to carry text; text sits on white or on cypress.",
+      "Don't use Lamp as text or icon color on white, or as a metallic/gradient gold.",
+      "Don't use the stock shadcn button sizes (`default`, `sm`, `xs`, 24–32px); they exist only for future clients.",
+      "Don't render a missing value as \"—\", \"N/A\", or an empty column; drop the row.",
+      "Don't pair a 1px border with a soft wide shadow on any element.",
+      "Don't use side-stripe borders, gradient text, or numbered \"01 / 02 / 03\" section markers. The Construction Story's stages are the one real sequence and the only numbered one."
+    ]
+  }
+}

@@ -1,4 +1,5 @@
 import type { PortableTextBlock } from "@portabletext/react";
+import type { ProjectStatus } from "@/lib/project";
 
 /**
  * Global TypeScript interfaces for Sanity documents and models.
@@ -42,13 +43,29 @@ export interface ContactInfo {
   mapIframe?: string;
 }
 
+export interface SalesOffice {
+  contactName?: string;
+  contactRole?: string;
+  photo?: SanityImage;
+  phone?: string;
+  whatsappNumber?: string;
+  workingHours?: string;
+  headline?: string;
+  ctaLabel?: string;
+  whatsappLabel?: string;
+  priceNote?: string;
+  bandImage?: SanityImage;
+}
+
 export interface SiteSettings {
   siteName: string;
   siteTagline?: string;
+  copyrightNotice?: string;
   logo?: SanityImage;
   logoHeight?: number;
   favicon?: { asset: { url: string } };
   contactInfo?: ContactInfo;
+  salesOffice?: SalesOffice;
   socialLinks?: SocialLink[];
   gaId?: string;
   gtmId?: string;
@@ -72,15 +89,67 @@ export interface Navigation {
   footerLinks?: NavItem[];
 }
 
+export type { ProjectStatus };
+
+export interface SpecRow {
+  _key: string;
+  label: string;
+  value: string;
+}
+
+export interface ProjectDocument {
+  _key: string;
+  title: string;
+  url?: string;
+}
+
+export interface UnitType {
+  _key: string;
+  name: string;
+  grossArea?: number;
+  netArea?: number;
+  totalCount?: number;
+  availableCount?: number;
+  floorPlan?: SanityImage;
+}
+
+export interface GalleryImage extends SanityImage {
+  _key: string;
+  caption?: string;
+}
+
 export interface Project {
   _id?: string;
   _createdAt?: string;
   _updatedAt?: string;
   title: string;
   slug: SanitySlug;
+  status: ProjectStatus;
+  location?: string;
+  mapUrl?: string;
+  summary?: string;
   mainImage?: SanityImage;
   body?: PortableTextBlock[];
+  startDate?: string;
+  plannedDelivery?: string;
+  actualDelivery?: string;
+  occupancyPermitDate?: string;
+  groundClass?: string;
+  foundationType?: string;
+  concreteClass?: string;
+  inspectionFirm?: string;
+  architect?: string;
+  landArea?: number;
+  floorCount?: number;
+  unitCount?: number;
+  extraSpecs?: SpecRow[];
+  documents?: ProjectDocument[];
+  unitTypes?: UnitType[];
+  amenities?: string[];
+  gallery?: GalleryImage[];
   seo?: SeoSettings;
+  // Home list projection only: unit type names without the full objects
+  unitTypeNames?: string[];
 }
 
 export interface CtaLink {
@@ -123,19 +192,50 @@ export interface ContactPage extends BasePage {
   contactInfo?: SiteSettings["contactInfo"];
 }
 
-export interface InnerPageWithCta extends BasePage {
+export interface ProjectsPage extends BasePage {
   pageTitle: string;
   pageSubtitle?: string;
-  ctaLabel?: string;
-  ctaLink?: string;
+  specsTitle?: string;
+  unitsTitle?: string;
+  amenitiesTitle?: string;
+  galleryTitle?: string;
+  documentsTitle?: string;
 }
 
-export type ProjectsPage = InnerPageWithCta;
+export interface StoryStage {
+  title?: string;
+  text?: string;
+}
+
+export type StoryProject = Pick<
+  Project,
+  | "title"
+  | "slug"
+  | "location"
+  | "mainImage"
+  | "groundClass"
+  | "landArea"
+  | "foundationType"
+  | "concreteClass"
+  | "floorCount"
+  | "inspectionFirm"
+  | "architect"
+  | "plannedDelivery"
+  | "actualDelivery"
+  | "occupancyPermitDate"
+  | "unitCount"
+>;
+
+export type DeliveredProject = Pick<
+  Project,
+  "title" | "slug" | "location" | "unitCount" | "plannedDelivery" | "actualDelivery" | "occupancyPermitDate"
+>;
 
 export interface HomePage {
   heroTitle: string;
   heroSubtitle?: string;
   heroImage?: SanityImage;
+  heroCaption?: string;
   heroCtaLabel?: string;
   heroCtaLink?: CtaLink;
   aboutTitle?: string;
@@ -146,7 +246,19 @@ export interface HomePage {
   aboutCtaLink?: string;
   projectsTitle?: string;
   projectsSubtitle?: string;
+  projectsCtaLabel?: string;
   featuredProjects?: Project[];
+  storyTitle?: string;
+  storySubtitle?: string;
+  storyCtaLabel?: string;
+  featuredStoryProject?: StoryProject;
+  stageGround?: StoryStage;
+  stageFoundation?: StoryStage;
+  stageFrame?: StoryStage;
+  stageHandover?: StoryStage;
+  recordTitle?: string;
+  recordSubtitle?: string;
+  deliveredProjects?: DeliveredProject[];
   seo?: SeoSettings;
 }
 

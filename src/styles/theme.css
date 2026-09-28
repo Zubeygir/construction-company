@@ -2,7 +2,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -28,6 +28,10 @@
   --color-lamp: var(--lamp);
   --color-lamp-bright: var(--lamp-bright);
   --color-surface: var(--surface);
+
+  --spacing-section: clamp(4rem, 3rem + 5vw, 8rem);
+  --spacing-gutter: var(--gutter);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 
   /* Near-square system: nothing rounder than 4px */
   --radius-sm: 2px;
@@ -74,4 +78,15 @@
   --input: var(--control-border);
   --ring: var(--cypress);
   --radius: 2px;
+
+  --shell: 90rem;
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 3rem);
+  /* The Turkish Overflow Rule: the nameplate cut narrows to 112 below 480px */
+  --display-wdth: 112;
+}
+
+@media (min-width: 480px) {
+  :root {
+    --display-wdth: 125;
+  }
 }

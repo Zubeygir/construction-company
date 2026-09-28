@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- docs/DESIGN.md → Logo: "T" in the wide nameplate cut on a Cypress square, 0 radius -->
+  <rect width="64" height="64" fill="#1b3e21"/>
+  <path fill="#f3f8f4" d="M12 14h40v11H37.5v26h-11V25H12z"/>
+</svg>

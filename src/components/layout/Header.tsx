@@ -3,9 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { SanityImage } from "@/components/ui/SanityImage";
-import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import {
   FaInstagram,
   FaFacebook,
@@ -16,7 +14,9 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { RiMenu3Line, RiCloseLine, RiArrowDownSLine, RiMailLine, RiPhoneLine } from "react-icons/ri";
+import { RiMenu3Line, RiCloseLine, RiArrowDownSLine, RiPhoneLine } from "react-icons/ri";
+import { Wordmark } from "@/components/layout/Wordmark";
+import { telHref, whatsappHref } from "@/lib/project";
 import { cn } from "@/lib/utils";
 
 import { SanityImage as SanityImageType, NavItem, SocialLink } from "@/types";
@@ -32,18 +32,15 @@ const socialIconMap: Record<string, React.ElementType> = {
   whatsapp: FaWhatsapp,
 };
 
-export interface HeaderContactInfo {
-  phone?: string;
-  email?: string;
-  whatsappNumber?: string;
-  address?: string;
-}
+const EASE_OUT_QUART = [0.25, 1, 0.5, 1] as const;
 
 export interface HeaderProps {
   siteName?: string;
   logo?: SanityImageType;
   links?: NavItem[];
-  contactInfo?: HeaderContactInfo;
+  phone?: string;
+  whatsappNumber?: string;
+  whatsappLabel?: string;
   socialLinks?: SocialLink[];
 }
 
@@ -55,187 +52,182 @@ export function Header({
   siteName,
   logo,
   links = [],
-  contactInfo,
+  phone,
+  whatsappNumber,
+  whatsappLabel,
   socialLinks = [],
 }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // Sayfa değiştiğinde menüyü kapat
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
+  const closeMenu = () => setMenuOpen(false);
 
   // Menü açıkken arka plan scroll kilidi
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen]);
-
-  // Escape tuşuna basıldığında menüyü kapat
-  useEffect(() => {
+    if (!menuOpen) return;
+    document.body.style.overflow = "hidden";
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
     };
-    if (menuOpen) {
-      window.addEventListener("keydown", handleKeyDown);
-      return () => window.removeEventListener("keydown", handleKeyDown);
-    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [menuOpen]);
 
   const isActive = (item: NavItem) => {
     const href = resolveHref(item);
-    if (href === "/" && pathname !== "/") return false;
+    if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };
 
+  const socials = socialLinks.filter((social) => social.url && socialIconMap[social.platform]);
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-20 items-center justify-between px-4">
-        <Link
-          href="/"
-          prefetch={false}
-          onMouseEnter={() => router.prefetch("/")}
-          className="flex items-center group h-full"
-        >
-          <div className="relative flex items-center justify-start transition-all duration-200 group-hover:scale-[1.02] active:scale-95 h-full py-4 max-w-[250px] md:max-w-[450px]">
-            {logo ? (
-              <SanityImage
-                image={logo}
-                width={800}
-                height={200}
-                fit="max"
-                className="h-full w-auto object-contain object-left"
-                priority
-              />
-            ) : (
-              <span className="font-bold text-xl tracking-tight leading-none">{siteName}</span>
+    <MotionConfig reducedMotion="user">
+      <header className="sticky top-0 z-40 w-full border-b border-border bg-background">
+        <div className="page-shell flex h-16 items-center justify-between gap-6 md:h-20">
+          <Link
+            href="/"
+            prefetch={false}
+            onMouseEnter={() => router.prefetch("/")}
+            onClick={closeMenu}
+            aria-label={siteName ? `${siteName} ana sayfa` : "Ana sayfa"}
+            className="flex items-center text-foreground outline-offset-4"
+          >
+            <Wordmark siteName={siteName} logo={logo} />
+          </Link>
+
+          <div className="hidden items-center gap-10 md:flex">
+            <nav aria-label="Ana menü" className="flex items-center gap-7">
+              {links.map((item, i) => (
+                <DesktopNavItem key={i} item={item} active={isActive(item)} />
+              ))}
+            </nav>
+            {phone && (
+              <a
+                href={telHref(phone)}
+                className="flex items-center gap-2 font-semibold tabular-nums text-foreground underline-offset-4 transition-colors hover:text-cypress hover:underline"
+              >
+                <RiPhoneLine aria-hidden className="size-5 text-cypress" />
+                {phone}
+              </a>
             )}
           </div>
-        </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6">
-          {links.map((item, i) => (
-            <DesktopNavItem key={i} item={item} active={isActive(item)} />
-          ))}
-        </nav>
-
-        {/* Mobile Controls */}
-        <div className="flex items-center gap-2 md:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? "Menüyü kapat" : "Menüyü aç"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-          >
-            {menuOpen ? <RiCloseLine size={20} /> : <RiMenu3Line size={20} />}
-          </Button>
+          <div className="-mr-2 flex items-center md:hidden">
+            {phone && (
+              <a
+                href={telHref(phone)}
+                aria-label={`Ara: ${phone}`}
+                className="flex size-11 items-center justify-center text-cypress"
+              >
+                <RiPhoneLine aria-hidden className="size-6" />
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Menüyü kapat" : "Menüyü aç"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+              className="flex size-11 items-center justify-center text-foreground"
+            >
+              {menuOpen ? <RiCloseLine aria-hidden className="size-6" /> : <RiMenu3Line aria-hidden className="size-6" />}
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Mobile Menu - Sağdan sola kayarak açılan tam ekran menü */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ x: "100%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: "100%", opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="fixed inset-x-0 top-20 bottom-0 h-[calc(100dvh-5rem)] bg-background/98 backdrop-blur-md z-40 md:hidden overflow-y-auto border-t"
-          >
-            <nav className="container mx-auto flex flex-col gap-2 px-6 py-6">
-              {links.map((item, i) => (
-                <div key={i} className="flex flex-col gap-1">
-                  <div className="flex items-center justify-between">
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              id="mobile-menu"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: EASE_OUT_QUART }}
+              className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-border bg-background md:hidden"
+            >
+              <nav aria-label="Mobil menü" className="page-shell flex flex-col py-6">
+                {links.map((item, i) => (
+                  <div key={i} className="border-b border-border">
                     <Link
                       href={resolveHref(item)}
                       prefetch={false}
+                      onClick={closeMenu}
+                      aria-current={isActive(item) ? "page" : undefined}
                       className={cn(
-                        "text-base font-medium py-2.5 transition-colors hover:text-primary",
-                        isActive(item) ? "text-primary font-semibold" : "text-foreground"
+                        "type-title block py-4",
+                        isActive(item) ? "text-cypress" : "text-foreground"
                       )}
                     >
                       {item.label}
                     </Link>
-                  </div>
-                  {item.subLinks && (
-                    <div className="flex flex-col gap-1 pl-4 border-l ml-1 mt-1">
-                      {item.subLinks.map((sub, j) => (
-                        <Link
-                          key={j}
-                          href={resolveHref(sub)}
-                          prefetch={false}
-                          className={cn(
-                            "text-sm font-medium py-2 transition-colors hover:text-primary",
-                            isActive(sub) ? "text-primary" : "text-muted-foreground"
-                          )}
-                        >
-                          {sub.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              {(contactInfo?.phone || contactInfo?.email || (socialLinks && socialLinks.length > 0)) && (
-                <div className="mt-8 pt-6 border-t flex flex-col gap-4">
-                  {contactInfo?.phone && (
-                    <a
-                      href={`tel:${contactInfo.phone}`}
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      <RiPhoneLine className="shrink-0" />
-                      {contactInfo.phone}
-                    </a>
-                  )}
-                  {contactInfo?.email && (
-                    <a
-                      href={`mailto:${contactInfo.email}`}
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      <RiMailLine className="shrink-0" />
-                      {contactInfo.email}
-                    </a>
-                  )}
-                  {socialLinks && socialLinks.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {socialLinks.map((social, i) => {
-                        const Icon = socialIconMap[social.platform];
-                        if (!Icon || !social.url) return null;
-                        return (
-                          <a
-                            key={i}
-                            href={social.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={social.platform}
-                            className="flex h-9 w-9 items-center justify-center rounded-full border text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                    {item.subLinks && item.subLinks.length > 0 && (
+                      <div className="flex flex-col pb-3 pl-4">
+                        {item.subLinks.map((sub, j) => (
+                          <Link
+                            key={j}
+                            href={resolveHref(sub)}
+                            prefetch={false}
+                            onClick={closeMenu}
+                            className={cn("py-2", isActive(sub) ? "text-cypress" : "text-muted-foreground")}
                           >
-                            <Icon size={16} />
-                          </a>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {(phone || whatsappNumber || socials.length > 0) && (
+                  <div className="mt-8 flex flex-col gap-4">
+                    {phone && (
+                      <a href={telHref(phone)} className="flex items-center gap-3 type-title tabular-nums text-foreground">
+                        <RiPhoneLine aria-hidden className="size-6 text-cypress" />
+                        {phone}
+                      </a>
+                    )}
+                    {whatsappNumber && whatsappLabel && (
+                      <a
+                        href={whatsappHref(whatsappNumber)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 text-foreground"
+                      >
+                        <FaWhatsapp aria-hidden className="size-6 text-cypress" />
+                        {whatsappLabel}
+                      </a>
+                    )}
+                    {socials.length > 0 && (
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {socials.map((social, i) => {
+                          const Icon = socialIconMap[social.platform];
+                          return (
+                            <a
+                              key={i}
+                              href={social.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={social.platform}
+                              className="flex size-11 items-center justify-center rounded-sm border border-border text-muted-foreground transition-colors hover:border-cypress hover:text-cypress"
+                            >
+                              <Icon aria-hidden size={18} />
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+    </MotionConfig>
   );
 }
 
@@ -245,8 +237,12 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Alt menü linklerinden biri aktifse üst menüyü de aktif boyarız
-  const isSubActive = item.subLinks?.some(sub => pathname === resolveHref(sub));
+  const isSubActive = item.subLinks?.some((sub) => pathname === resolveHref(sub));
   const reallyActive = active || isSubActive;
+  const linkClass = cn(
+    "flex items-center gap-1 underline-offset-[6px] decoration-2 transition-colors hover:text-cypress hover:underline",
+    reallyActive ? "text-cypress underline" : "text-foreground"
+  );
 
   if (!item.subLinks || item.subLinks.length === 0) {
     return (
@@ -256,10 +252,8 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
         onMouseEnter={() => router.prefetch(resolveHref(item))}
         target={item.openInNewTab ? "_blank" : undefined}
         rel={item.openInNewTab ? "noopener noreferrer" : undefined}
-        className={cn(
-          "text-sm font-medium transition-colors hover:text-primary",
-          reallyActive ? "text-primary font-semibold" : "text-foreground/70"
-        )}
+        aria-current={active ? "page" : undefined}
+        className={linkClass}
       >
         {item.label}
       </Link>
@@ -267,36 +261,38 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
   }
 
   return (
-    <div 
-      className="relative group"
+    <div
+      className="relative"
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
+      onFocus={() => setIsOpen(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setIsOpen(false);
+      }}
     >
       <Link
         href={resolveHref(item)}
         prefetch={false}
         onMouseEnter={() => router.prefetch(resolveHref(item))}
-        className={cn(
-          "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary",
-          reallyActive ? "text-primary font-semibold" : "text-foreground/70"
-        )}
+        aria-expanded={isOpen}
+        className={linkClass}
       >
         {item.label}
-        <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <RiArrowDownSLine size={16} />
+        <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2, ease: EASE_OUT_QUART }}>
+          <RiArrowDownSLine aria-hidden size={16} />
         </motion.span>
       </Link>
-      
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full pt-4 min-w-[200px]"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.2, ease: EASE_OUT_QUART }}
+            className="absolute left-0 top-full min-w-[14rem] pt-4"
           >
-            <div className="bg-popover border rounded-xl shadow-xl p-2 overflow-hidden">
+            <div className="border border-border bg-popover py-2">
               {item.subLinks.map((sub, j) => {
                 const subActive = pathname === resolveHref(sub);
                 return (
@@ -308,8 +304,8 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
                     target={sub.openInNewTab ? "_blank" : undefined}
                     rel={sub.openInNewTab ? "noopener noreferrer" : undefined}
                     className={cn(
-                      "flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-muted transition-colors",
-                      subActive ? "text-primary bg-primary/5" : "text-foreground/70"
+                      "block px-4 py-2.5 transition-colors hover:bg-surface",
+                      subActive ? "text-cypress" : "text-foreground"
                     )}
                   >
                     {sub.label}

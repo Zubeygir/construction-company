@@ -5,13 +5,13 @@ import { buildMetadata, getLayoutData } from "@/lib/seo";
 
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/JsonLd";
-import NextTopLoader from "nextjs-toploader";
 
 // Variable width axis: wdth 125 is the display "nameplate" cut, wdth 100 the body (see docs/DESIGN.md)
+// Named --font-archivo, not --font-sans: Tailwind's @theme emits --font-sans itself, and the same name made it self-referencing (invalid)
 const archivo = Archivo({
   subsets: ["latin", "latin-ext"],
   axes: ["wdth"],
-  variable: "--font-sans",
+  variable: "--font-archivo",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,16 +23,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="tr" className={archivo.variable} suppressHydrationWarning>
-      <body className={archivo.className}>
-        {/* Sayfa geçişlerinde üstte ince ilerleme çubuğu — marka rengi kullanır */}
-        <NextTopLoader
-          color="var(--primary)"
-          height={3}
-          showSpinner={false}
-          shadow={false}
-          speed={200}
-          crawlSpeed={200}
+      <head>
+        {/* The hero intro plays once per browser session (docs/DESIGN.md → Hero); set before paint so it never flashes */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem("tinaz-intro"))document.documentElement.dataset.intro="seen";else sessionStorage.setItem("tinaz-intro","1")}catch(e){}`,
+          }}
         />
+      </head>
+      <body className={archivo.className}>
         {settings?.gtmId && <GoogleTagManager gtmId={settings.gtmId} />}
         {settings?.gaId && <GoogleAnalytics gaId={settings.gaId} />}
         <JsonLd data={organizationJsonLd(settings)} />

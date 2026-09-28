@@ -49,5 +49,5 @@ This clone is a boutique residential-developer demo. Before any UI, content, or 
 - `src/app/globals.css`: Imports only.
 - `src/styles/theme.css`: `@theme inline` and `:root` design tokens (brand colors, radius).
 - `src/styles/base.css`: `@layer base` resets.
-- `src/styles/utilities.css`: Custom animations and keyframes.
+- `src/styles/utilities.css`: Custom utilities (type roles `type-display`/`type-headline`/`type-title`/`type-label`, `page-shell`), animations and keyframes.
 - Utility-first Tailwind only. No dark mode by default (not implemented in the boilerplate; implement per project only if explicitly requested).

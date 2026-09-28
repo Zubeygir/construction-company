@@ -1,6 +1,6 @@
 # Tınaz Yapı: Residential Developer Demo
 
-Marketing site for a fictional boutique residential developer in Urla, built as a resellable demo on the Next.js + Sanity boilerplate. Re-skin per client through design tokens and Sanity content.
+Marketing site for a fictional boutique residential developer in Bakırköy, İstanbul, built as a resellable demo on the Next.js + Sanity boilerplate. Re-skin per client through design tokens and Sanity content.
 
 **Start here:** `docs/PRODUCT.md` (strategy), `docs/DESIGN.md` (visual system), `docs/CONTENT-MODEL.md` (schema spec), `docs/ROADMAP.md` (decisions, open questions, next steps). Agent rules live in `CLAUDE.md` (mirrored in `.agents/rules/boilerplate-rules.md`).
 
@@ -26,6 +26,25 @@ npm run dev
 ### 1. Sanity project
 
 Create a **separate** Sanity project (or at least a separate dataset) for this demo at [sanity.io/manage](https://sanity.io/manage). Do not reuse the boilerplate's project: demo content would mix with it. Put the ID and dataset in `NEXT_PUBLIC_SANITY_PROJECT_ID` / `NEXT_PUBLIC_SANITY_DATASET`.
+
+**Demo content.** `seed/build-seed.mjs` writes `seed/tinaz-demo.ndjson`: nine Bakırköy projects (one per status, a half-empty "Yakında" one, and completed buildings back to 1981 for the delivery record), every singleton, and Unsplash images that the import downloads and uploads. `sanity.cli.ts` reads the project ID from `.env.local`.
+
+If you are logged in to the Sanity CLI (`npx sanity login`), no token is needed; this replaces the seeded documents using your login:
+
+```powershell
+node seed/build-seed.mjs
+npx sanity exec seed/import.mjs --with-user-token
+```
+
+Otherwise the import needs an API token (sanity.io/manage → project → API → Tokens, Editor role), passed through the environment for the current shell only. Never commit it or put it in `.env.local`; delete the token after the import.
+
+```powershell
+node seed/build-seed.mjs
+$env:SANITY_IMPORT_TOKEN = "<editor token>"
+npx sanity dataset import seed/tinaz-demo.ndjson --dataset production --replace
+```
+
+`--replace` overwrites documents with the same `_id`; run it only against the demo dataset.
 
 ### 2. Webhook (on-demand ISR)
 
@@ -68,13 +87,13 @@ _type in [
   ),
   "affectsList": select(
     delta::operation() != "update" => true,
-    _type == "project" => delta::changedAny((title, slug.current, mainImage, status, location, summary, plannedDelivery, seo.noIndex)),
+    _type == "project" => delta::changedAny((title, slug.current, mainImage, status, location, summary, plannedDelivery, actualDelivery, occupancyPermitDate, unitCount, groundClass, landArea, foundationType, concreteClass, floorCount, inspectionFirm, architect, seo.noIndex)),
     false
   )
 }
 ```
 
-`affectsList` names every field the project list/cards read (see `docs/CONTENT-MODEL.md` §4). Update it when list queries change.
+`affectsList` names every project field that pages other than the project's own detail page read: the project list and home rows, the home delivery record, and the home Construction Story stages (see `docs/CONTENT-MODEL.md` §3–4). Update it when those queries change.
 
 ### 3. Contact form (SMTP)
 

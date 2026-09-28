@@ -1,84 +1,81 @@
+import Link from "next/link";
+import { RiArrowRightLine } from "react-icons/ri";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { StatusTag } from "@/components/ui/StatusTag";
+import { SpecList } from "@/components/ui/SpecList";
+import { ProjectRow, stretchedLink } from "@/components/projects/ProjectRow";
+import { SPEC_LABELS, formatCount, formatMonthYear } from "@/lib/project";
 import { Project } from "@/types";
 
 interface ProjectsSectionProps {
   title?: string;
   subtitle?: string;
+  ctaLabel?: string;
   projects?: Project[];
 }
 
-export function ProjectsSection({
-  title,
-  subtitle,
-  projects = [],
-}: ProjectsSectionProps) {
-  const displayTitle = title || "Öne Çıkan Projelerimiz";
-  const displaySubtitle = subtitle || "Başarıyla tamamladığımız güncel projeler.";
+export function ProjectsSection({ title, subtitle, ctaLabel, projects = [] }: ProjectsSectionProps) {
+  if (projects.length === 0) return null;
+  const [lead, ...rest] = projects;
 
   return (
-    <section className="py-20 md:py-28 bg-background">
-      <div className="container mx-auto px-4">
-        
-        {/* Header */}
-        <SectionHeading
-          title={displayTitle}
-          subtitle={displaySubtitle}
-          className="mb-16"
-        />
+    <section aria-labelledby="projects-title" className="py-section">
+      <div className="page-shell">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          {title && <SectionHeading id="projects-title" title={title} subtitle={subtitle} />}
+          {ctaLabel && (
+            <Link
+              href="/projeler"
+              prefetch={false}
+              className="group/cta flex shrink-0 items-center gap-2 font-semibold text-cypress underline-offset-4 hover:underline"
+            >
+              {ctaLabel}
+              <RiArrowRightLine aria-hidden className="size-5 transition-transform duration-200 ease-out-quart motion-safe:group-hover/cta:translate-x-1" />
+            </Link>
+          )}
+        </div>
 
-        {/* Content */}
-        {projects && projects.length > 0 ? (
-          <div className="space-y-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.slice(0, 3).map((project: Project) => (
-                <Link key={project.slug?.current} href={`/projeler/${project.slug?.current}`} prefetch={false} className="group block relative overflow-hidden rounded-xl border aspect-[4/3]">
-                  {project.mainImage ? (
-                    <div className="absolute inset-0">
-                      <SanityImage
-                        image={project.mainImage}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      {/* Black overlay that fades/darkens on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 group-hover:via-black/50 group-hover:from-black/90 transition-all duration-300" />
-                    </div>
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-background flex items-center justify-center p-6 text-center">
-                      <h3 className="font-bold text-xl text-foreground line-clamp-2">{project.title}</h3>
-                    </div>
-                  )}
+        {/* The lead project reads like its site board: name first, then the checkable facts */}
+        <article className="group relative mt-12 grid gap-8 md:mt-16 lg:grid-cols-12 lg:gap-12">
+          {lead.mainImage && (
+            <div className="relative aspect-[4/3] overflow-hidden bg-surface lg:col-span-7 lg:aspect-auto lg:min-h-[36rem]">
+              <SanityImage
+                image={lead.mainImage}
+                fill
+                sizes="(min-width: 1024px) 58vw, 100vw"
+                className="object-cover transition-transform duration-500 ease-out-quart motion-safe:group-hover:scale-[1.02]"
+              />
+            </div>
+          )}
+          <div className="flex flex-col lg:col-span-5">
+            <StatusTag status={lead.status} className="self-start" />
+            <h3 className="type-headline mt-5 text-foreground lg:text-[3.25rem]">
+              <Link href={`/projeler/${lead.slug.current}`} prefetch={false} className={`${stretchedLink} underline-offset-[6px] decoration-2 group-hover:underline`}>
+                {lead.title}
+              </Link>
+            </h3>
+            {lead.location && <p className="mt-3 text-muted-foreground">{lead.location}</p>}
+            {lead.summary && <p className="mt-6 max-w-[48ch] text-foreground">{lead.summary}</p>}
+            <SpecList
+              className="mt-8 lg:mt-auto lg:pt-8"
+              items={[
+                { label: SPEC_LABELS.floorCount, value: formatCount(lead.floorCount) },
+                { label: SPEC_LABELS.unitCount, value: formatCount(lead.unitCount) },
+                { label: SPEC_LABELS.unitTypes, value: lead.unitTypeNames?.join(" · ") },
+                { label: SPEC_LABELS.plannedDelivery, value: formatMonthYear(lead.plannedDelivery) },
+              ]}
+            />
+          </div>
+        </article>
 
-                  {/* Dynamic absolute text over the image */}
-                  <div className="absolute bottom-0 inset-x-0 p-6 z-10 flex flex-col justify-end h-full">
-                    <h3 className="font-bold text-lg md:text-xl text-white line-clamp-2 group-hover:text-primary transition-colors duration-300">
-                      {project.title}
-                    </h3>
-                    <div className="mt-2 overflow-hidden max-h-0 group-hover:max-h-12 transition-all duration-500 ease-in-out">
-                      <span className="text-white/80 font-medium text-xs tracking-wider uppercase flex items-center">
-                        Projeyi İncele <span className="ml-1">→</span>
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-            
-            <div className="text-center pt-4">
-              <Button variant="outline" size="lg" render={<Link href="/projeler" prefetch={false} />}>
-                Tüm Projeleri Gör
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <p className="text-muted-foreground text-center py-12">Henüz öne çıkarılmış bir proje bulunmuyor.</p>
-          </div>
+        {rest.length > 0 && (
+          <ul className="mt-16 border-t border-border">
+            {rest.map((project) => (
+              <ProjectRow key={project.slug.current} project={project} />
+            ))}
+          </ul>
         )}
-
       </div>
     </section>
   );
