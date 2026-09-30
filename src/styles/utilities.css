@@ -96,26 +96,14 @@
   font-variation-settings: "wdth" var(--display-wdth);
 }
 
-/* Hero intro (docs/DESIGN.md → Hero): dusk falls on the photograph, the name is set word by word on the nameplate,
-   then the lamp CTA flickers on like a tungsten bulb. Time-based, once per session (data-intro="seen" skips it),
-   never under reduced motion. Fill mode is backwards only: the resting state is the normal, fully visible page. */
+/* Hero intro (docs/DESIGN.md → Hero): the model's windows light one by one (HeroModel, three.js), then the lamp CTA
+   flickers on like a tungsten bulb. The project nameplate's photo comes up from dusk. Time-based, once per session
+   (data-intro="seen" skips it), never under reduced motion. Fill mode is backwards only: the resting state is the
+   normal, fully visible page. */
 @keyframes hero-dusk {
   from {
     transform: scale(1.08);
     filter: brightness(0.35) saturate(0.6);
-  }
-}
-
-@keyframes hero-set {
-  from {
-    transform: translateY(110%);
-  }
-}
-
-@keyframes hero-rise {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
   }
 }
 
@@ -141,32 +129,11 @@
   }
 }
 
-/* Each word rides inside its own mask; the padding keeps ascents (İ, Ö) and descents (y, p) from being clipped */
-.hero-word-mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-  padding-block: 0.1em 0.18em;
-  margin-block: -0.1em -0.18em;
-}
-
-.hero-word {
-  display: inline-block;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   :root:not([data-intro="seen"]) .hero-settle {
     animation: hero-dusk 2600ms cubic-bezier(0.25, 1, 0.5, 1) backwards;
   }
-  :root:not([data-intro="seen"]) .hero-word {
-    animation: hero-set 1000ms cubic-bezier(0.25, 1, 0.5, 1) backwards;
-    animation-delay: calc(250ms + var(--i, 0) * 70ms);
-  }
-  :root:not([data-intro="seen"]) .hero-rise {
-    animation: hero-rise 800ms cubic-bezier(0.25, 1, 0.5, 1) backwards;
-    animation-delay: var(--d, 0ms);
-  }
   :root:not([data-intro="seen"]) .hero-lamp {
-    animation: hero-lamp 1600ms linear 900ms backwards;
+    animation: hero-lamp 1600ms linear 1900ms backwards;
   }
 }
